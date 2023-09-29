@@ -1,7 +1,7 @@
 NAME := cub3D
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
-SRCS := cub3d.c
+SRCS := cub3d.c mlx_utils.c
 OBJ_DIR := obj
 SRC_DIR := src
 SRCS := $(SRCS:%=$(SRC_DIR)/%)
@@ -19,7 +19,7 @@ $(LIBS_TARGET):
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(DIR_DUP)
-	$(CC) $(CFLAGS) -Iinclude -Imlx -o $@ -c $<
+	$(CC) $(CFLAGS) -Iinclude -Imlx -o $@ -c $< -g3
 
 clean:
 	rm -f $(OBJS)
