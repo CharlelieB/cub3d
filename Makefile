@@ -1,13 +1,14 @@
 NAME := cub3D
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
-SRCS := mlx_utils.c test.c
+#SRCS := mlx_utils.c test.c
+SRCS := gnl_test.c
 OBJ_DIR := obj
 SRC_DIR := src
 SRCS := $(SRCS:%=$(SRC_DIR)/%)
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DIR_DUP = mkdir -p $(@D)
-LIBS_TARGET := mlx/libmlx.a
+LIBS_TARGET := mlx/libmlx.a libft/libft.a
 
 all: $(NAME)
 
@@ -19,7 +20,7 @@ $(LIBS_TARGET):
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(DIR_DUP)
-	$(CC) $(CFLAGS) -Iinclude -Imlx -o $@ -c $< -g3
+	$(CC) $(CFLAGS) -Iinclude -Imlx -Ilibft/include -o $@ -c $< -g3
 
 clean:
 	rm -f $(OBJS)
