@@ -2,7 +2,7 @@ NAME := cub3D
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
 #SRCS := mlx_utils.c test.c
-SRCS := gnl_test.c
+SRCS := parsing.c
 OBJ_DIR := obj
 SRC_DIR := src
 SRCS := $(SRCS:%=$(SRC_DIR)/%)
@@ -13,7 +13,7 @@ LIBS_TARGET := mlx/libmlx.a libft/libft.a
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBS_TARGET)
-	$(CC) -o $@ $^ -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm -lz -Llibft/ -g3
+	$(CC) -o $@ $^ -Lmlx -lmlx -L/usr/lib -lXext -lX11 -lm -lz -Llibft/ -lft -g3
 
 $(LIBS_TARGET):
 	$(MAKE) -C $(@D)
