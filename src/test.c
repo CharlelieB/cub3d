@@ -13,13 +13,6 @@
 #define MAP_W 24
 #define MAP_H 24
 
-int	ft_abs(int nb)
-{
-	if (nb < 0)
-		return (-nb);
-	return (nb);
-}
-
 int map[] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -102,26 +95,26 @@ void	draw_direction(t_data *data)
 	{
 	printf("test----- %.10f\n", ray.x);
 		stepX = -1;
-		side_dist_x = (data->ppos.x - (float)map_x) * deltaDistX;
+		side_dist_x = (data->ppos.x - (float) map_x) * deltaDistX;
 	}
 	else
 	{
 		stepX = 1;
-		side_dist_x = ((float)map_x + 1.0 - data->ppos.x) * deltaDistX;
+		side_dist_x = ((float) map_x + 1.0 - data->ppos.x) * deltaDistX;
 	}
 	if (ray.y < 0)
 	{
 		stepY = -1;
-		side_dist_y = (data->ppos.y -(float) map_y) * deltaDistY;
+		side_dist_y = (data->ppos.y - (float) map_y) * deltaDistY;
 	}
 	else
 	{
 		stepY = 1;
-		side_dist_y = (map_y + 1.0 - (float)data->ppos.y) * deltaDistY;
+		side_dist_y = ((float) map_y + 1.0 - data->ppos.y) * deltaDistY;
 	}
 	while (hit == 0)
 	{
-		ft_pixel_put(&data->mlx->img, 8 + 16 * map_x,8 + 16 * map_y, 0xF23636);
+		//ft_pixel_put(&data->mlx->img, 16 + map_x, 16 + map_y, 0xF23636);
 		if (side_dist_x < side_dist_y)
 		{
 			printf("test debug %f\n", side_dist_x);
@@ -138,7 +131,14 @@ void	draw_direction(t_data *data)
 		if (map[map_x + (map_y * MAP_W)] == 1)
 			hit = 1;
 	}
+	t_vector_int end;
+	t_vector_int start;
 
+	start.x = (int)(data->ppos.x * 16);
+	start.y = (int)(data->ppos.y * 16);
+	end.x = map_x * 16;
+	end.y = map_y * 16;
+	draw_line(start, end, &data->mlx->img);
 }
 
 bool	render(t_data *data)
@@ -149,13 +149,13 @@ bool	render(t_data *data)
 		return (true);
 }
 
-void draw_square(t_img *img, int x, int y, int color)
+void draw_square(t_img *img, int x, int y, int color, int size)
 {
 	int draw_x, draw_y;
 
-	for (int i = 0; i < 16; i++)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < 16; j++)
+		for (int j = 0; j < size; j++)
 		{
 			draw_x = i + x;
 			draw_y = j + y;
@@ -174,18 +174,25 @@ void draw(t_data *data)
 	//draw walls
 	for (int i = 0; i < MAP_W; i++)
 	{
+		for (int k = 0; k < MAP_W * 16; k++)
+		{
+			ft_pixel_put(&data->mlx->img, i * 16, k, 0xD5D5D5);
+		}
 		for (int j = 0; j < MAP_H; j++)
 		{
+			for (int k = 0; k < MAP_W * 16; k++)
+			{
+				ft_pixel_put(&data->mlx->img, k, j * 16, 0xD5D5D5);
+			}
 			if (map[i + (MAP_W * j)] == 1)
 			{
-				draw_square(&data->mlx->img, i * 16, j * 16, 0x5FF236);
+				draw_square(&data->mlx->img, i * 16, j * 16, 0x5FF236, 16);
 			}
 		}
 	}
 	draw_direction(data);
 	//draw player
-	draw_square(&data->mlx->img, (int)data->ppos.x * 16, (int)data->ppos.y * 16, 0x36A4F2);
-
+	draw_square(&data->mlx->img, (int)(data->ppos.x * 16), (int)(data->ppos.y * 16), 0x36A4F2, 8);
 }
 
 int	handle_no_event(void *data)
@@ -202,9 +209,9 @@ void	move_player(int key, t_data *data)
 	if (key == XK_a || key == XK_d)
 	{
 		if (key == XK_a)
-			x = data->ppos.x - 1;
+			x = data->ppos.x - 0.2;
 		else
-			x = data->ppos.x + 1;
+			x = data->ppos.x + 0.2;
 		if (x < 0 || x >= MAP_W || map[(int)x + (MAP_W * (int)data->ppos.y)] == 1)
 			return ;
 		data->ppos.x = x;
@@ -212,9 +219,9 @@ void	move_player(int key, t_data *data)
 	else if (key == XK_w || key == XK_s)
 	{
 		if (key == XK_w)
-			y = data->ppos.y - 1;
+			y = data->ppos.y - 0.2;
 		else
-			y = data->ppos.y + 1;
+			y = data->ppos.y + 0.2;
 		if (y < 0 || y >= MAP_H || map[(int)data->ppos.x + (MAP_W * (int)y)] == 1)
 			return ;
 		data->ppos.y = y;
@@ -230,7 +237,7 @@ void	move_direction(int key, t_data *data)
 	float	rot;
 
 	old_x = data->pdir.x;
-	rot = M_PI/180 * 45;
+	rot = M_PI/180 * 10;
 
 	if (key == XK_Left)
 	{

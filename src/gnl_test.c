@@ -1,12 +1,12 @@
 #include <stdio.h>
-#include "get_next_line.h"
+#include "libft.h"
 
 int main(void)
 {
-	char *line = 0;
-	unsigned int		l_size = 0;
+	char line[255] = "salut ca    va?";
+	t_str_array array;
 
-	while (get_next_line(0, &line, &l_size))
+	while (ft_split2(&array, line))
 	{
 		printf("%d\n", l_size);
 		printf("%s\n", line);

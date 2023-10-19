@@ -3,6 +3,55 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "get_next_line.h"
+#include <stdbool.h>
+
+static const char *direction[2] = 
+{
+	"NO",
+	"SO",
+	"WE",
+	"EA",
+	"F"
+	"C"
+};
+
+int	is_space(char c)
+{
+	return (c == ' ' || (c <= 9 && c >= 13));
+}
+
+bool	is_empty(char *str)
+{
+	while (*str)
+	{
+		if (*str != '\n' && !is_space(*str))
+			return (false);
+		++str;
+	}
+	return (true);
+}
+
+bool	parse(char **map)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 6)
+	{
+		while (is_empty(map[i]))
+			*(++map)
+		while (is_space(*(map[i])))
+			++(map[i]);
+		j = 0;
+		while (j < 6)
+		{
+			if (ft_strncmp(map))
+			j++;
+		}
+		i++;
+	}
+}
 
 int	main(int argc, char **argv)
 {
@@ -43,5 +92,6 @@ int	main(int argc, char **argv)
 		free(map[j]);
 	}
 	close(fd);
+	// parse(map);
 	return (0);
 }
