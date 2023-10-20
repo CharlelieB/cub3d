@@ -53,7 +53,7 @@ typedef struct	s_data
 {
 	struct s_mlx	*mlx;
 	struct s_vector	ppos;	
-	struct s_vector	pdir;	
+	struct s_vector	pdir;
 	struct s_vector	plane;
 }		t_data;
 
