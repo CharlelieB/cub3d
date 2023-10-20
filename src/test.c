@@ -35,7 +35,7 @@ int map[] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 };
 
-float	ft_abs_float(float nb)
+float	ft_fabs(float nb)
 {
 	if (nb < 0)
 		return (-nb);
@@ -86,17 +86,17 @@ void	draw_walls(t_data *data, int side, float side_dist_x,
 	int 	draw_end;
 
 	if(side == 0)
-		wall_dist = (side_dist_x - deltaDistX);
+		wall_dist = ft_fabs(side_dist_x - deltaDistX);
     else
-		wall_dist = (side_dist_y - deltaDistY);
+		wall_dist = ft_fabs(side_dist_y - deltaDistY);
 	if (wall_dist)
-		line_height = (int)(SCREEN_H / wall_dist);
+		line_height = ft_abs((int)(SCREEN_H / wall_dist));
 	else
 		line_height = INFINITY;
 	if (side == 0)
-		printf("test side = 0:  %f %f %f\n", wall_dist, side_dist_x, deltaDistX);
+		printf("test side = 0:  wall %f %f %f\n", wall_dist, side_dist_x, deltaDistX);
 	else
-		printf("test side = 1: %f %f %f\n", wall_dist, side_dist_y, deltaDistY);
+		printf("test side = 1: wall %f %f %f\n", wall_dist, side_dist_y, deltaDistY);
     draw_start = -line_height / 2 + SCREEN_H_HALF;
     if(draw_start < 0)
 		draw_start = 0;
@@ -125,7 +125,7 @@ void	draw_direction(t_data *data, int x)
 	int map_x, map_y;
 	int	side;
 	float camera_x = 2 * x / (float)SCREEN_W - 1;
-	
+
 	ray.x = data->pdir.x + data->plane.x * camera_x;
 	ray.y = data->pdir.y + data->plane.y * camera_x;
 	map_x = (int)data->ppos.x;
@@ -136,11 +136,11 @@ void	draw_direction(t_data *data, int x)
 	if (ray.x == 0)
 		deltaDistX = 1.0e30f;
 	else
-		deltaDistX = ft_abs_float(1 / ray.x);
+		deltaDistX = ft_fabs(1 / ray.x);
 	if (ray.y == 0)
 		deltaDistY = 1.0e30f;
 	else
-		deltaDistY = ft_abs_float(1 / ray.y);
+		deltaDistY = ft_fabs(1 / ray.y);
 	hit = 0;
 
 	if (ray.x < 0)
@@ -163,8 +163,8 @@ void	draw_direction(t_data *data, int x)
 		stepY = 1;
 		side_dist_y = ((float) map_y + 1.0 - data->ppos.y) * deltaDistY;
 	}
-	//printf("ray.x : %f ray.y : %f | %f %f %f %f\n", ray.x, ray.y, side_dist_x, side_dist_y, deltaDistX, deltaDistY);
-	//printf("test -- %f %f\n", ((float) map_x + 1.0 - data->ppos.x), deltaDistX);
+	//printf("ray.x : %f ray.y : %f | SideDistX %f, SideDistY %f DeltaX %f DeltaY %f\n", ray.x, ray.y, side_dist_x, side_dist_y, deltaDistX, deltaDistY);
+	// printf("test -- %f %f\n", ((float) map_x + 1.0 - data->ppos.x), deltaDistX);
 	while (hit == 0)
 	{
 		if (side_dist_x < side_dist_y)
@@ -245,6 +245,13 @@ void draw(t_data *data)
 			}
 		}
 	}
+	// t_vector_int start;
+	// t_vector_int end;
+	// start.x = (int)(data->ppos.x * 4);
+	// start.y = (int)(data->ppos.y * 4);
+	// end.x = (int)ft_abs_float(1 / data->pdir.x);
+	// end.y = (int)ft_abs_float(1 / data->pdir.y);
+	// draw_line(start, end, &data->mlx->img);
 	draw_square(&data->mlx->img, (int)(data->ppos.x * 4), (int)(data->ppos.y * 4), 0x36A4F2, 4);
 }
 
@@ -260,7 +267,7 @@ void	move_player(int key, t_data *data)
 	// float	x, y;
 	float	speed;
 
-	speed = 0.5;
+	speed = 0.2;
 	if (key == XK_w)
 	{
 		if(map[(int)(data->ppos.x + data->pdir.x * speed) + (MAP_W * (int)data->ppos.y)] != 1) 
@@ -300,8 +307,7 @@ void	move_direction(int key, t_data *data)
 
 	old_x = data->pdir.x;
 	old_plane_x = data->plane.x;
-	rot = M_PI/180 * 2.0;
-
+	rot = M_PI/180 * 2;
 	if (key == XK_a)
 	{
 		data->pdir.x = old_x * cos(rot) - data->pdir.y * sin(rot);
@@ -316,6 +322,7 @@ void	move_direction(int key, t_data *data)
 		data->plane.x = old_plane_x * cos(-rot) - data->plane.y * sin(-rot);
 		data->plane.y = old_plane_x * sin(-rot) + data->plane.y * cos(-rot);
 	}
+
 	// printf("Before %.10f %.10f\n", data->pdir.x, data->pdir.y);
 	ft_clear_image(&data->mlx->img);
 	draw(data);
@@ -341,12 +348,12 @@ void	mlx_functions(t_data *data)
 
 void	init(t_data *data)
 {
-	data->pdir.x = 0;
-	data->pdir.y = 1;
+	data->pdir.x = 1;
+	data->pdir.y = 0;
 	data->plane.x = 0;
-	data->plane.y = 0.66; 
-	data->ppos.x = 7;
-	data->ppos.y = 7;
+	data->plane.y = 0.66; //change based on player direction
+	data->ppos.x = 17;
+	data->ppos.y = 17;
 }
 
 int	main(void)
