@@ -12,6 +12,7 @@
 #define RAY_INCREMENT 60/320
 #define MAP_W 24
 #define MAP_H 24
+#define TILE_SIZE 16
 
 int map[] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -75,6 +76,36 @@ void	ft_clear_image(t_img *img)
 	}
 }
 
+void	draw_walls(t_data *data, int side, float side_dist_x,
+	float side_dist_y, float deltaDistX, float deltaDistY)
+{
+	float	wall_dist;
+	int lineHeight;
+	int draw_start;
+	int draw_end;
+
+	if(side == 0)
+		wall_dist = (side_dist_x - deltaDistX);
+      else
+		wall_dist = (side_dist_y - deltaDistY);
+
+	lineHeight = (int)(SCREEN_H / wall_dist);
+
+    //calculate lowest and highest pixel to fill in current stripe
+    draw_start = -lineHeight / 2 + SCREEN_H_HALF;
+    if(draw_start < 0)
+		draw_start = 0;
+    draw_end = lineHeight / 2 + SCREEN_H_HALF;
+    if(draw_end >= SCREEN_H)
+		draw_end = SCREEN_H - 1;
+	int count = draw_end - draw_start;
+	for (int i= 0; i < count; i++)
+	{
+		ft_pixel_put(&data->mlx->img, 0, draw_start, 0xF23636);
+		++draw_start;
+	}
+}
+
 void	draw_direction(t_data *data)
 {
 	float		side_dist_x;
@@ -83,7 +114,7 @@ void	draw_direction(t_data *data)
 	int		stepX, stepY;
 	int		hit;
 	int map_x, map_y;
-	//int	side;
+	int	side;
 	ray.x = data->pdir.x;
 	ray.y = data->pdir.y;
 	map_x = (int)data->ppos.x;
@@ -91,9 +122,9 @@ void	draw_direction(t_data *data)
 	float deltaDistX = (ray.x == 0) ? 1e30 : ft_abs(1 / ray.x);
 	float deltaDistY = (ray.y == 0) ? 1e30 : ft_abs(1 / ray.y);
 	hit = 0;
+
 	if (ray.x < 0)
 	{
-	printf("test----- %.10f\n", ray.x);
 		stepX = -1;
 		side_dist_x = (data->ppos.x - (float) map_x) * deltaDistX;
 	}
@@ -114,31 +145,35 @@ void	draw_direction(t_data *data)
 	}
 	while (hit == 0)
 	{
-		//ft_pixel_put(&data->mlx->img, 16 + map_x, 16 + map_y, 0xF23636);
 		if (side_dist_x < side_dist_y)
 		{
-			printf("test debug %f\n", side_dist_x);
 			side_dist_x += deltaDistX;
 			map_x += stepX;
-			//side = 0;
+			side = 0;
 		}
 		else
 		{
 			side_dist_y += deltaDistY;
 			map_y += stepY;
-			//side = 1;
+			side = 1;
 		}
 		if (map[map_x + (map_y * MAP_W)] == 1)
 			hit = 1;
 	}
+	/* 
+	To draw ray in 2d (minimap)
 	t_vector_int end;
 	t_vector_int start;
 
-	start.x = (int)(data->ppos.x * 16);
-	start.y = (int)(data->ppos.y * 16);
+	start.x = (int)(data->ppos.x * 16) + 4;
+	start.y = (int)(data->ppos.y * 16) + 4;	
 	end.x = map_x * 16;
 	end.y = map_y * 16;
+	printf("Start : X = %d Y = %d | End : X = %d Y = %d\n", (int)data->ppos.x, (int)data->ppos.y, 
+	map_x, map_y);
 	draw_line(start, end, &data->mlx->img);
+	*/
+	draw_walls(data, side, side_dist_x, side_dist_y, deltaDistX, deltaDistY);
 }
 
 bool	render(t_data *data)
@@ -191,8 +226,8 @@ void draw(t_data *data)
 		}
 	}
 	draw_direction(data);
-	//draw player
 	draw_square(&data->mlx->img, (int)(data->ppos.x * 16), (int)(data->ppos.y * 16), 0x36A4F2, 8);
+	//draw player
 }
 
 int	handle_no_event(void *data)
@@ -237,7 +272,7 @@ void	move_direction(int key, t_data *data)
 	float	rot;
 
 	old_x = data->pdir.x;
-	rot = M_PI/180 * 10;
+	rot = M_PI/180 * 2;
 
 	if (key == XK_Left)
 	{
@@ -249,7 +284,7 @@ void	move_direction(int key, t_data *data)
 		data->pdir.x = old_x * cos(-rot) - data->pdir.y * sin(-rot);
 		data->pdir.y = old_x * sin(-rot) + data->pdir.y * cos(-rot);
 	}
-	printf("Before %.10f %.10f\n", data->pdir.x, data->pdir.y);
+	// printf("Before %.10f %.10f\n", data->pdir.x, data->pdir.y);
 	ft_clear_image(&data->mlx->img);
 	draw(data);
 	render(data);

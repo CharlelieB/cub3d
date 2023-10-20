@@ -60,7 +60,7 @@ void	line1(t_vector_int *start, t_vector_int *end, t_img *img)
 
 void	draw_line(t_vector_int start, t_vector_int end, t_img *img)
 {
-	if (ft_abs(end.x - start.x) >= ft_abs(end.y - end.y))
+	if (ft_abs(end.x - start.x) >= ft_abs(end.y - start.y))
 	{
 		if (start.x > end.x)
 		{

@@ -10,6 +10,7 @@
 
 #define SCREEN_W 640
 #define SCREEN_H 400
+#define SCREEN_H_HALF 200
 
 enum	e_direction
 {
