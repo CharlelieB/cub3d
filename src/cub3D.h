@@ -20,6 +20,14 @@ enum	e_direction
 	WEST
 };
 
+enum	e_keys
+{
+	W,
+	A,
+	S,
+	D
+};
+
 typedef struct	s_img
 {
 	void	*mlx_img;
@@ -55,6 +63,7 @@ typedef struct	s_data
 	struct s_vector	ppos;	
 	struct s_vector	pdir;
 	struct s_vector	plane;
+	char			keys[4];
 }		t_data;
 
 typedef struct s_line

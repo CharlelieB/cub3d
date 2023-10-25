@@ -93,10 +93,10 @@ void	draw_walls(t_data *data, int side, float side_dist_x,
 		line_height = ft_abs((int)(SCREEN_H / wall_dist));
 	else
 		line_height = INFINITY;
-	if (side == 0)
-		printf("test side = 0:  wall %f %f %f\n", wall_dist, side_dist_x, deltaDistX);
-	else
-		printf("test side = 1: wall %f %f %f\n", wall_dist, side_dist_y, deltaDistY);
+	// if (side == 0)
+	// 	printf("test side = 0:  wall %f %f %f\n", wall_dist, side_dist_x, deltaDistX);
+	// else
+	// 	printf("test side = 1: wall %f %f %f\n", wall_dist, side_dist_y, deltaDistY);
     draw_start = -line_height / 2 + SCREEN_H_HALF;
     if(draw_start < 0)
 		draw_start = 0;
@@ -268,11 +268,11 @@ void	move_player(int key, t_data *data)
 	float	speed;
 
 	speed = 0.2;
-	if (key == XK_w)
+	if (key == W)
 	{
 		if(map[(int)(data->ppos.x + data->pdir.x * speed) + (MAP_W * (int)data->ppos.y)] != 1) 
 			data->ppos.x += data->pdir.x * speed;
-      	if(map[(int)data->ppos.x + (MAP_W * (int)(data->ppos.y + data->pdir.y * speed))] != 1) 
+		if(map[(int)data->ppos.x + (MAP_W * (int)(data->ppos.y + data->pdir.y * speed))] != 1) 
 			data->ppos.y += data->pdir.y * speed;
 		// x = data->ppos.x + (speed * data->pdir.x);
 		// if (map[(int)x + (MAP_W * (int)data->pdir.y)] != 1)
@@ -281,11 +281,11 @@ void	move_player(int key, t_data *data)
 		// if (map[(int)data->pdir.x + (MAP_W * (int)y)] != 1)
 		// 	data->ppos.y = y;
 	}
-	if (key == XK_s)
+	else if (key == S)
 	{  
 		if(map[(int)(data->ppos.x - data->pdir.x * speed) + (MAP_W * (int)data->ppos.y)] != 1) 
 			data->ppos.x -= data->pdir.x * speed;
-      	if(map[(int)data->ppos.x + (MAP_W * (int)(data->ppos.y - data->pdir.y * speed))] != 1) 
+		if(map[(int)data->ppos.x + (MAP_W * (int)(data->ppos.y - data->pdir.y * speed))] != 1) 
 			data->ppos.y -= data->pdir.y * speed;  
 		// x = data->ppos.x - (speed * data->pdir.x);
 		// y = data->ppos.y - (speed * data->pdir.y);
@@ -305,24 +305,23 @@ void	move_direction(int key, t_data *data)
 	float	old_plane_x;
 	float	rot;
 
+	rot = M_PI/180 * 2;
 	old_x = data->pdir.x;
 	old_plane_x = data->plane.x;
-	rot = M_PI/180 * 2;
-	if (key == XK_a)
+	if (key == D)
 	{
 		data->pdir.x = old_x * cos(rot) - data->pdir.y * sin(rot);
 		data->pdir.y = old_x * sin(rot) + data->pdir.y * cos(rot);
 		data->plane.x = old_plane_x * cos(rot) - data->plane.y * sin(rot);
 		data->plane.y = old_plane_x * sin(rot) + data->plane.y * cos(rot);
 	}
-	else if (key == XK_d)
+	else if (key == A)
 	{
 		data->pdir.x = old_x * cos(-rot) - data->pdir.y * sin(-rot);
 		data->pdir.y = old_x * sin(-rot) + data->pdir.y * cos(-rot);
 		data->plane.x = old_plane_x * cos(-rot) - data->plane.y * sin(-rot);
 		data->plane.y = old_plane_x * sin(-rot) + data->plane.y * cos(-rot);
 	}
-
 	// printf("Before %.10f %.10f\n", data->pdir.x, data->pdir.y);
 	ft_clear_image(&data->mlx->img);
 	draw(data);
@@ -333,16 +332,67 @@ int	handle_keypress(int keysym, t_data *data)
 {
 	if (keysym == XK_Escape)
 		mlx_loop_end(data->mlx->mlx_ptr);
-	if (keysym == XK_w || keysym == XK_s)
-		move_player(keysym, data);
-	if (keysym == XK_a || keysym == XK_d)
-		move_direction(keysym, data);
+	// if (keysym == XK_w || keysym == XK_s)
+	// 	move_player(keysym, data);
+	// if (keysym == XK_a || keysym == XK_d)
+	// 	move_direction(keysym, data);
+	if (data->keys[W])
+		move_player(W, data);
+	else if (data->keys[S])
+		move_player(S, data);
+	if (data->keys[A])
+		move_direction(A, data);
+	else if (data->keys[D])
+		move_direction(D, data);
+	return (0);
+}
+
+int	set_key_release(int keysym, t_data *data)
+{
+	if (keysym == XK_w)
+	{
+		data->keys[W] = 0;
+				printf("ho\n");
+	}
+	if (keysym == XK_a)
+		data->keys[A] = 0;
+	if (keysym == XK_s)
+		data->keys[S] = 0;
+	if (keysym == XK_d)
+		data->keys[D] = 0;
+	return (0);
+}
+
+int	set_key_press(int keysym, t_data *data)
+{
+	if (keysym == XK_w)
+	{
+		data->keys[W] = 1;
+		data->keys[S] = 0;
+	}
+	else if (keysym == XK_a)
+	{
+		data->keys[A] = 1;
+		data->keys[D] = 0;
+	}
+	else if (keysym == XK_s)
+	{
+		data->keys[S] = 1;
+		data->keys[W] = 0;
+	}
+	else if (keysym == XK_d)
+	{
+		data->keys[D] = 1;
+		data->keys[A] = 0;
+	}
+	handle_keypress(keysym, data);
 	return (0);
 }
 
 void	mlx_functions(t_data *data)
 {
-	mlx_hook(data->mlx->win_ptr, KeyPress, KeyPressMask, &handle_keypress, data);
+	mlx_hook(data->mlx->win_ptr, KeyPress, KeyPressMask, &set_key_press, data);
+	mlx_hook(data->mlx->win_ptr, KeyRelease, KeyReleaseMask, &set_key_release, data);
 	mlx_loop(data->mlx->mlx_ptr);
 }
 
@@ -354,6 +404,10 @@ void	init(t_data *data)
 	data->plane.y = 0.66; //change based on player direction
 	data->ppos.x = 17;
 	data->ppos.y = 17;
+	data->keys[W] = 0;
+	data->keys[A] = 0;
+	data->keys[S] = 0;
+	data->keys[D] = 0;
 }
 
 int	main(void)
