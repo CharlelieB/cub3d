@@ -417,6 +417,21 @@ void	init(t_data *data)
 	data->keys[D] = 0;
 }
 
+void	test_texture(t_data *data)
+{
+	//int fd;
+
+	// fd = open("textures/wall.png");
+	// if (fd == -1)
+	// 	printf("cannot open\n");
+	int		img_width;
+	int		img_height;
+
+	img_width = 64;
+	img_height = 64;
+	data->mlx->img = mlx_png_file_to_image(data->mlx, "textures/wall.png", &img_width, &img_height);
+}
+
 int	main(void)
 {
 	t_data data;
@@ -426,10 +441,11 @@ int	main(void)
 	if (!set_img(&mlx))
 		return (1);
 	//parser
+	test_texture(&data);
 	init(&data);
 	//game_loop_start
 	//raycast();
-	draw(&data);
+	//draw(&data);
 	render(&data);
 	mlx_functions(&data);
 	free_memory(&mlx);
