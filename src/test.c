@@ -103,9 +103,9 @@ void	draw_walls(t_data *data, int side, float side_dist_x,
     draw_end = line_height / 2 + SCREEN_H_HALF;
     if(draw_end >= SCREEN_H)
 		draw_end = SCREEN_H - 1;
-	int color = 0xF23636;
+	int color = 0x232323;
 	if (side == 1)
-		color = color / 2;
+		color = 0x5f5f5f;
 	int count = draw_end - draw_start;
 	// printf("%d %d\n", draw_start, draw_end);
 	for (int i = 0; i < count; i++)
@@ -224,7 +224,17 @@ void draw_square(t_img *img, int x, int y, int color, int size)
 }
 
 void draw(t_data *data)
-{	
+{
+	for (int i = 0; i < SCREEN_H_HALF; ++i)
+	{
+		for (int j = 0; j < SCREEN_W; ++j)
+			ft_pixel_put(&data->mlx->img, j, i, 0x6ac7f9);
+	}
+	for (int i = SCREEN_H_HALF; i < SCREEN_H; ++i)
+	{
+		for (int j = 0; j < SCREEN_W; ++j)
+			ft_pixel_put(&data->mlx->img, j, i, 0xffeb7b);
+	}
 	for (int i = 0; i < SCREEN_W; i++)
 		draw_direction(data, i);
 	for (int i = 0; i < MAP_W; i++)
@@ -350,10 +360,7 @@ int	handle_keypress(int keysym, t_data *data)
 int	set_key_release(int keysym, t_data *data)
 {
 	if (keysym == XK_w)
-	{
 		data->keys[W] = 0;
-				printf("ho\n");
-	}
 	if (keysym == XK_a)
 		data->keys[A] = 0;
 	if (keysym == XK_s)
