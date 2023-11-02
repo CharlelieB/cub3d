@@ -6,7 +6,7 @@
 # include <X11/X.h>
 # include <stdlib.h>
 # include <stdbool.h>
-#include "libft.h"
+# include "libft.h"
 
 #define SCREEN_W 640
 #define SCREEN_H 400
@@ -35,7 +35,6 @@ typedef struct	s_img
 	int		bpp;
 	int		line_len;
 	int		endian;
-	bool	is_clean;
 }				t_img;
 
 typedef struct	s_vector
@@ -55,6 +54,7 @@ typedef struct	s_mlx
 	void	*mlx_ptr;
 	void	*win_ptr;
 	t_img	img;
+	t_img	textures;
 }		t_mlx;
 
 typedef struct	s_data
