@@ -11,6 +11,13 @@
 #define SCREEN_W 640
 #define SCREEN_H 400
 #define SCREEN_H_HALF 200
+#define TEX_W 64
+#define MAP_W 24
+#define MAP_H 24
+
+typedef float t_f;
+
+extern int map[MAP_W * MAP_H];
 
 enum	e_direction
 {
@@ -59,14 +66,28 @@ typedef struct	s_mlx
 	t_img	textures[4];
 }		t_mlx;
 
-typedef struct	s_data
+typedef struct	s_game
 {
 	struct s_mlx	*mlx;
 	struct s_vector	ppos;	
 	struct s_vector	pdir;
 	struct s_vector	plane;
 	char			keys[4];
-}		t_data;
+}				t_game;
+
+typedef struct s_data
+{
+	t_vector	ray;
+	float		side_x;
+	float		side_y;
+	int			side;
+	int			map_x;
+	int			map_y;
+	float 		delta_x;
+	float		delta_y;
+	int			step_x;
+	int			step_y;
+}				t_data;
 
 typedef struct s_line
 {
@@ -81,5 +102,7 @@ bool	set_img(t_mlx *mlx);
 void	free_memory(t_mlx *mlx);
 void	draw_line(t_vector_int start, t_vector_int end, t_img *img);
 void	ft_pixel_put(t_img *img, int x, int y, int color);
+void	raycasting(t_game *game, int x);
+float	ft_fabs(float nb);
 
 #endif
