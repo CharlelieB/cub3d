@@ -203,7 +203,7 @@ bool	render(t_data *data)
 	if (data->mlx->win_ptr == NULL)
 		return (false);
 	mlx_put_image_to_window(data->mlx->mlx_ptr, data->mlx->win_ptr, data->mlx->img.mlx_img, 0, 0);
-	mlx_put_image_to_window(data->mlx->mlx_ptr, data->mlx->win_ptr, data->mlx->textures.mlx_img, 0, 0);
+	mlx_put_image_to_window(data->mlx->mlx_ptr, data->mlx->win_ptr, data->mlx->textures[0].mlx_img, 0, 0);
 	return (true);
 }
 
@@ -418,25 +418,12 @@ void	init(t_data *data)
 	data->keys[D] = 0;
 }
 
-void	test_texture(t_data *data)
+void	test_texture(t_mlx *mlx)
 {
-	//int fd;
-
-	// fd = open("textures/wall.png");
-	// if (fd == -1)
-	// 	printf("cannot open\n");
-	// int		img_width;
-	// int		img_height;
-
-	// img_width = 64;
-	// img_height = 64;
-	//data->mlx->textures.mlx_img = mlx_xpm_file_to_image(data->mlx, "./textures/wall.xpm", &img_width, &img_height);
-	data->mlx->textures.mlx_img = mlx_new_image(data->mlx, SCREEN_W, SCREEN_H);
-	if (!data->mlx->textures.mlx_img)
-		printf("couldn't load texture\n");
-	// printf("debug %p\n", data->mlx->textures.mlx_img);
-	data->mlx->textures.addr = mlx_get_data_addr(data->mlx->textures.mlx_img, &data->mlx->textures.bpp, &data->mlx->textures.line_len, &data->mlx->textures.endian);
-	printf("coucou\n");
+	mlx->textures[0].mlx_img = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/redbrick.xpm",&mlx->textures[0].width, &mlx->textures[0].height);
+	if (mlx->textures[0].mlx_img == 0)
+		printf("error couldn't load texture\n");
+	mlx->textures[0].addr = mlx_get_data_addr(mlx->textures[0].mlx_img, &mlx->textures[0].bpp, &mlx->textures[0].line_len, &mlx->textures[0].endian);
 }
 
 int	main(void)
@@ -448,7 +435,7 @@ int	main(void)
 	if (!set_img(&mlx))
 		return (1);
 	//parser
-	test_texture(&data);
+	test_texture(&mlx);
 	init(&data);
 	//game_loop_start
 	//raycast();

@@ -35,6 +35,8 @@ typedef struct	s_img
 	int		bpp;
 	int		line_len;
 	int		endian;
+	int		width;
+	int		height;
 }				t_img;
 
 typedef struct	s_vector
@@ -54,7 +56,7 @@ typedef struct	s_mlx
 	void	*mlx_ptr;
 	void	*win_ptr;
 	t_img	img;
-	t_img	textures;
+	t_img	textures[4];
 }		t_mlx;
 
 typedef struct	s_data
