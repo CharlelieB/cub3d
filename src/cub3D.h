@@ -12,6 +12,7 @@
 #define SCREEN_H 400
 #define SCREEN_H_HALF 200
 #define TEX_W 64
+#define TEX_H 64
 #define MAP_W 24
 #define MAP_H 24
 
@@ -87,6 +88,9 @@ typedef struct s_data
 	float		delta_y;
 	int			step_x;
 	int			step_y;
+	float 		wall_dist;
+	int 		wall_height;
+	int 		screen_x;
 }				t_data;
 
 typedef struct s_line

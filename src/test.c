@@ -75,16 +75,6 @@ void	ft_clear_image(t_img *img)
 	}
 }
 
-// void	draw_textures(t_game *game)
-// {
-// 	int	text_id = 0;
-// 	float	wall_x;
-
-// 	if (side == 0)
-// 		wall_x = game->pdir.y + wall_dist * ray_dir_y;
-
-// }
-
 bool	render(t_game *game)
 {
 	if (game->mlx->win_ptr == NULL)
@@ -143,13 +133,6 @@ void draw(t_game *game)
 			}
 		}
 	}
-	// t_vector_int start;
-	// t_vector_int end;
-	// start.x = (int)(game->ppos.x * 4);
-	// start.y = (int)(game->ppos.y * 4);
-	// end.x = (int)ft_abs_float(1 / game->pdir.x);
-	// end.y = (int)ft_abs_float(1 / game->pdir.y);
-	// draw_line(start, end, &game->mlx->img);
 	draw_square(&game->mlx->img, (int)(game->ppos.x * 4), (int)(game->ppos.y * 4), 0x36A4F2, 4);
 }
 
@@ -314,16 +297,29 @@ void	test_texture(t_mlx *mlx)
 		printf("error couldn't load texture\n");
 	mlx->textures[0].addr = mlx_get_data_addr(mlx->textures[0].mlx_img, &mlx->textures[0].bpp, &mlx->textures[0].line_len, &mlx->textures[0].endian);
 
-	int indice = 20 * 4 + mlx->textures[0].line_len * 10;
+	int indice = 34 * 4 + mlx->textures[0].line_len * 34;
 
-	color = malloc(mlx->textures[0].bpp);
+	color = malloc(4);
 
-	ft_memcpy(color, mlx->textures[0].addr + indice, mlx->textures[0].bpp);
+	int c = 0;
+
+	char *ptr = mlx->textures[0].addr;
+	for (int i = 0; i <= 4; ++i)
+	{
+		c = c | *(ptr + i);
+		if (i != 3)
+			c <<= 8;
+	}
+	// c >>= 8;
+	printf("======== %d\n", c);
+
+	ft_memcpy(color, mlx->textures[0].addr + indice, 4);
 
 	printf("test %d\n", indice);
 	//print colors (4 char)
 	for(int i = 0; i < 4; i++)
 		printf("color %d\n", *(color + i));
+	
 }
 
 int	main(void)
