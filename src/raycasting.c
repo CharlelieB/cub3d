@@ -9,6 +9,8 @@ void draw_textures(t_game *game, t_data *data, int start, int end)
 	float 	wall_x;
 	int 	tex_x;
 
+	if (data->side == 0 && data->ray.x > 0)
+		text_id = 1;
 	if (data->side == 0)
 		wall_x = game->ppos.y + data->wall_dist * data->ray.y;
 	else
@@ -19,12 +21,12 @@ void draw_textures(t_game *game, t_data *data, int start, int end)
 		tex_x = TEX_W - tex_x - 1;
 	float	step = 1.0f * TEX_H / data->wall_height;
 	float	tex_pos = (start - SCREEN_H_HALF + data->wall_height / 2) * step;
+	int texture_w = game->mlx->textures[text_id].line_len;
 	for (int y = start; y < end; ++y)
 	{
 		int tex_y = (int)tex_pos & (TEX_H - 1);
 		tex_pos += step;
-		int color = *(game->mlx->textures[text_id].addr + game->mlx->textures[text_id].line_len * tex_y + tex_x * 4);
-		// printf("%d\n", color);
+		int color = *(unsigned int *)(game->mlx->textures[text_id].addr + texture_w * tex_y + tex_x * 4);
 		ft_pixel_put(&game->mlx->img, data->screen_x, y, color);
 	}
 }
