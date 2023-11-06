@@ -69,12 +69,23 @@ typedef struct	s_mlx
 
 typedef struct	s_game
 {
+	char			**map;
 	struct s_mlx	*mlx;
 	struct s_vector	ppos;	
 	struct s_vector	pdir;
 	struct s_vector	plane;
 	char			keys[4];
 }				t_game;
+
+typedef struct	s_parsing
+{
+	char		**map;
+	int			alloc_size;
+	char 			*line;
+	unsigned int	lsize;
+	int				map_h;
+	int				map_max_w;
+}				t_parsing;
 
 typedef struct s_data
 {

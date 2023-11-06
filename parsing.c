@@ -17,7 +17,6 @@ int	main(int argc, char **argv)
 		write(2, "cannot open file\n", 17);
 	while (get_next_line(fd, &line))
 	{
-
 		++(*map) = malloc(sizeof(line));
 		strdup 
 		free(line);
