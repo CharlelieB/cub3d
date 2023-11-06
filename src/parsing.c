@@ -6,15 +6,15 @@
 #include "get_next_line.h"
 #include <stdbool.h>
 
-// static const char *direction[] = 
-// {
-// 	"NO",
-// 	"SO",
-// 	"WE",
-// 	"EA",
-// 	"F",
-// 	"C"
-// };
+static const char *g_direction[] = 
+{
+	"NO",
+	"SO",
+	"WE",
+	"EA",
+	"F",
+	"C"
+};
 
 int	is_space(char c)
 {
@@ -32,27 +32,40 @@ bool	is_empty(char *str)
 	return (true);
 }
 
-// bool	parse(char **map)
-// {
-// 	int	i;
-// 	int	j;
+bool	map_compare_direction(char *str)
+{
+	if (!ft_strncmp(str, "SO", 2) || !ft_strncmp(str, "NO", 2)
+		|| !ft_strncmp(str, "WE", 2) || !ft_strncmp(str, "EA", 2)
+			|| !ft_strncmp(str, "C", 1) || !ft_strncmp(str, "F", 1))
+	{
+		while ()
+		return (true);
+	}
+	return (false);
+}
 
-// 	i = 0;
-// 	while (i < 6)
-// 	{
-// 		while (is_empty(map[i]))
-// 			*(++map);
-// 		while (is_space(*(map[i])))
-// 			++(map[i]);
-// 		j = 0;
-// 		while (j < 6)
-// 		{
-// 			if (ft_strncmp(map))
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
+/* ft_strncmp CHECK IF I DID RIGHT -------------------------- */
+bool	map_check_assets(t_parsing *parsing, t_game *game)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 6)
+	{
+		while (is_empty(*parsing->map))
+			++(*(parsing->map));
+		while (is_space(*(parsing->map[i])))
+			++(*(parsing->map[i]));
+		j = 0;
+		while (j < 6)
+		{
+			if (ft_strncmp(parsing->map[i], g_direction[j], ))
+			j++;
+		}
+		i++;
+	}
+}
 
 void	map_check_format(char *filename)
 {
@@ -189,14 +202,14 @@ bool	map_parse(char *filename, t_parsing *parsing, t_game *game)
 	fd = open(filename, O_RDONLY);
 	if (fd >= 0)
 	{
-		if (map_save(fd, parsing))
-		{
-			close(fd);
-			if (map_edit(parsing, game))
-				return (true);
+		if (!map_save(fd, parsing))
+			return (close(fd), false);
+		close(fd);
+		if (!map_check_assets(parsing, game))
 			return (false);
-		}
-		return (close(fd), false);
+		if (!map_edit(parsing, game))
+			return (true);
+
 	}
 	perror("Couldn't open map");
 	return (false);

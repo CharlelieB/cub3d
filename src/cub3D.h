@@ -76,6 +76,7 @@ typedef struct	s_game
 	struct s_vector	ppos;
 	struct s_vector	pdir;
 	struct s_vector	plane;
+	char			tex_path[6];
 	char			keys[4];
 }				t_game;
 
