@@ -84,7 +84,7 @@ typedef struct	s_parsing
 	char 			*line;
 	unsigned int	lsize;
 	int				map_h;
-	int				map_max_w;
+	unsigned int	map_max_w;
 }				t_parsing;
 
 typedef struct s_data

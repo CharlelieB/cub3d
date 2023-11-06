@@ -101,7 +101,13 @@ bool	ft_realloc(t_parsing *parsing)
 		free_map(parsing->map, parsing->map_h);
 		return (false);
 	}
-
+	while (i < parsing->map_h)
+	{
+		*(new_map + i) = *(parsing->map + i);
+		++i;
+	}
+	free(parsing->map);
+	parsing->map = new_map;
 	return (true);
 }
 
@@ -110,8 +116,9 @@ bool	ft_realloc(t_parsing *parsing)
 bool	map_save(int fd, t_parsing *parsing)
 {
 	parsing->map_h = 0;
+	parsing->map_max_w = 0;
 	parsing->line = 0;
-	parsing->lsize;
+	parsing->lsize = 0;
 	parsing->alloc_size = 32;
 	parsing->map = malloc(sizeof(char *) * parsing->alloc_size);
 	if (!parsing->map)
@@ -121,31 +128,34 @@ bool	map_save(int fd, t_parsing *parsing)
 	}
 	while (get_next_line(fd, &parsing->line, &parsing->lsize))
 	{
-		// if (i > alloc_s)
-		// {
-		// 	alloc_s = ft_next_power(alloc_s);
-		// 	map = malloc(sizeof(char *) * alloc_s);
-		// }
 		if (parsing->map_h > parsing->alloc_size)
 			if (!ft_realloc(parsing))
 				return (free(parsing->line), false);
-		ft_strlcpy(*(map + i), line, lsize);
-		free(line);
-		line = 0;
+		*(parsing->map + parsing->map_h) = malloc(parsing->lsize);
+		if (!*(parsing->map + parsing->map_h))
+			return (free_map(parsing->map, parsing->map_h), false);
+		//printf("%p\n", *(parsing->map + parsing->map_h));
+		ft_strlcpy(*(parsing->map + parsing->map_h), parsing->line, parsing->lsize);
+		if (parsing->lsize > parsing->map_max_w)
+			parsing->map_max_w = parsing->lsize;
+		free(parsing->line);
+		parsing->line = 0;
 		++parsing->map_h;
 	}
+	printf("Height of the map : %d, Max width : %d\n", parsing->map_h, parsing->map_max_w);
 	for (int j = 0; j < parsing->map_h; j++)
 	{
-		printf("%s\n", map[j]);
-		free(map[j]);
+		printf("%s\n", parsing->map[j]);
+		free(parsing->map[j]);
 	}
+	return (true);
 }
 
 void	map_parse(char *filename, t_parsing *parsing)
 {
 	int fd;
 
-	fd = open(filename[1], O_RDONLY);
+	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		perror("Couldn't open map");
 	map_save(fd, parsing);
