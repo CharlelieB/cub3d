@@ -22,10 +22,16 @@ extern int map[MAP_W * MAP_H];
 
 enum	e_direction
 {
-	NORTH,
-	EAST,
-	SOUTH,
-	WEST
+	NO,
+	SO,
+	WE,
+	EA
+};
+
+enum	e_surface
+{
+	F = 67,
+	C = 70
 };
 
 enum	e_keys
@@ -76,7 +82,8 @@ typedef struct	s_game
 	struct s_vector	ppos;
 	struct s_vector	pdir;
 	struct s_vector	plane;
-	char			tex_path[6];
+	char			tex_path[4];
+	int				surfaces_color[2];
 	char			keys[4];
 }				t_game;
 

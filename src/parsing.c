@@ -6,15 +6,14 @@
 #include "get_next_line.h"
 #include <stdbool.h>
 
-static const char *g_direction[] = 
+static const char *g_textures[] = 
 {
 	"NO",
 	"SO",
 	"WE",
-	"EA",
-	"F",
-	"C"
+	"EA"
 };
+
 
 int	is_space(char c)
 {
@@ -32,16 +31,84 @@ bool	is_empty(char *str)
 	return (true);
 }
 
-bool	map_compare_direction(char *str)
+int	rgb_to_hexa(char r, char g, char b)
 {
-	if (!ft_strncmp(str, "SO", 2) || !ft_strncmp(str, "NO", 2)
-		|| !ft_strncmp(str, "WE", 2) || !ft_strncmp(str, "EA", 2)
-			|| !ft_strncmp(str, "C", 1) || !ft_strncmp(str, "F", 1))
+	int	color;
+
+	if (r < 0 || g < 0 || b < 0)
+		return (-1);
+	color = (r << 16) | (g << 8) | b;
+	return (color);
+}
+
+int	parse_rgb(char *str)
+{
+	int		i;
+	int		j;
+	int		rgb[3];
+
+	i = 0;
+	while (str[i] && i < 3)
 	{
-		while ()
-		return (true);
+		j = -1;
+		while (++j < 3 && str[j])
+			if (str[j] < '0' || str[j] > '9')
+				return (-1);
+		if (str[j])
+			str[j++] = 0;
+		rgb[i] = ft_atoi(str);
+		if (rgb[i] < 0 || rgb[i] > 255)
+			return (-1);
+		if (i != 2 && str[j++] != ',')
+			return (false);
+		str += j;
+		++i;
 	}
-	return (false);
+	if (i != 3 || *str != '\n')
+		return (-1);
+	return (rgb_to_hexa((char)rgb[0], (char)rgb[1], (char)rgb[2]));
+}
+
+bool	map_compare_direction(char *str, t_game *game)
+{
+	int	 i;
+
+	i = 0;
+	while (i < 4)
+	{
+		if (!ft_strncmp(str, g_textures[i], 2))
+		{
+			str += 2;
+			if (*str != ' ')
+				return (write(2, "Texture : wrong format\n", 24), false);
+			while (is_space(*str))
+				++str;
+			game->tex_path[i] = str;
+			while (*str && *str != '\n' && !is_space(*str))
+				++str;
+			if (*str)
+				*(str++) = 0;
+			while (is_space(*str))
+				++str;
+			if (*str != '\n')
+				return (write(2, "Texture : wrong format\n", 24), false);
+			return (true);
+		}
+		++i;
+	}	
+	if (*str == 'C' || *str == 'F')
+	{
+		++str;
+		if (!is_space(*str))
+			return (write(2, "Surface color : wrong format\n", 30), false);
+		while (is_space(*str))
+				++str;
+		game->surfaces_color[*str] = parse_rgb(str);
+		if (game->surfaces_color[*str] == -1)
+			return (write(2, "Surface color : not RGB\n", 25), false);
+		
+	}
+	return (write(2, "Texture : wrong format\n", 24), false);
 }
 
 /* ft_strncmp CHECK IF I DID RIGHT -------------------------- */
