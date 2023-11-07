@@ -89,9 +89,9 @@ bool	map_edit(t_parsing *parsing, t_game *game)
 		while (j < parsing->map_max_w)
 			(game->map)[i * parsing->map_max_w + j++] = 32;
 	}
-	//free_map(parsing->map, parsing->map_h);
 	game->map_h = parsing->map_h;
 	game->map_w = parsing->map_max_w;
+	free_map(parsing->map, parsing->map_h);
 	printf("Height of the map : %d, Max width : %d\n", game->map_h, game->map_w);
 	for (unsigned int k = 0; k < game->map_h; k++)
 	{
@@ -125,7 +125,7 @@ bool	map_assets_save(int fd, t_parsing *parsing)
 		{
 			parsing->assets[i] = malloc(parsing->lsize + 1);
 			if (!parsing->assets[i])
-				return (free_stack_array_ptr(parsing->assets, i), false);
+				return (free(parsing->line), free_stack_array_ptr(parsing->assets, i), false);
 			ft_strlcpy(parsing->assets[i], parsing->line, parsing->lsize + 1);
 			++i;
 		}
@@ -157,8 +157,7 @@ bool	map_save(int fd, t_parsing *parsing)
 				return (free(parsing->line), false);
 		*(parsing->map + parsing->map_h) = malloc(parsing->lsize + 1);
 		if (!*(parsing->map + parsing->map_h))
-			return (free_map(parsing->map, parsing->map_h), false);
-		//printf("%p\n", *(parsing->map + parsing->map_h));
+			return (free(parsing->line), free_map(parsing->map, parsing->map_h), false);
 		ft_strlcpy(*(parsing->map + parsing->map_h), parsing->line, parsing->lsize + 1);
 		if (parsing->lsize > parsing->map_max_w)
 			parsing->map_max_w = parsing->lsize;
@@ -174,12 +173,12 @@ bool	map_parse(int fd, t_parsing *parsing, t_game *game)
 	if (!map_assets_save(fd, parsing))
 		return (false);
 	if (!map_check_assets(parsing, game))
-		return (false);
+		return (free_stack_array_ptr(parsing->assets, 6), false);
 	if (!map_save(fd, parsing))
 		return (free_stack_array_ptr(parsing->assets, 6), false);
 	if (!map_edit(parsing, game))
-		return (true);
-	return (false);
+		return (free(game->map), false);
+	return (true);
 }
 
 int	main(int argc, char **argv)
@@ -190,7 +189,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		write(2, "Not enough argument\n", 20);
+		write(2, "Error\nPlease provide one argument\n", 36);
 		return (-1);
 	}
 	map_check_format(argv[1]);
@@ -199,8 +198,10 @@ int	main(int argc, char **argv)
 		write(2, "Error\nCould't open map file\n", 30);
 	if (!map_parse(fd, &parsing, &game))
 		return (close(fd), -1);
-	printf("game_exec\n");
 	close(fd);
+	printf("game_exec\n");
+	free(game.map);
+	free_stack_array_ptr(parsing.assets, 6);
 	// parse(map);
 	return (0);
 }

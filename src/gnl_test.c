@@ -1,14 +1,25 @@
 #include <stdio.h>
+#include "get_next_line.h"
 #include "libft.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
-int main(void)
+
+int main(int argc, char **argv)
 {
-	char line[255] = "salut ca    va?";
-	t_str_array array;
+	(void)argc;
 
-	while (ft_split2(&array, line))
+	char *line = 0;
+	unsigned int line_size = 0;
+
+	int fd = open(argv[1], O_RDONLY);
+	while (get_next_line(fd, &line, &line_size))
 	{
-		printf("%d\n", l_size);
-		printf("%s\n", line);
+		printf("%s", line);
+		free(line);
+		line = 0;
 	}
+	// printf("%s\n", line);
+	// free(line);
 }
