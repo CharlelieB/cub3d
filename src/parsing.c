@@ -1,138 +1,11 @@
 #include "cub3D.h"
+#include "parsing.h"
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
 #include "get_next_line.h"
 #include <stdbool.h>
-
-static const char *g_textures[] = 
-{
-	"NO",
-	"SO",
-	"WE",
-	"EA"
-};
-
-
-int	is_space(char c)
-{
-	return (c == ' ' || (c >= 9 && c <= 13));
-}
-
-bool	is_empty(char *str)
-{
-	while (*str)
-	{
-		if (*str != '\n' && !is_space(*str))
-			return (false);
-		++str;
-	}
-	return (true);
-}
-
-int	rgb_to_hexa(char r, char g, char b)
-{
-	int	color;
-
-	if (r < 0 || g < 0 || b < 0)
-		return (-1);
-	color = (r << 16) | (g << 8) | b;
-	return (color);
-}
-
-int	parse_rgb(char *str)
-{
-	int		i;
-	int		j;
-	int		rgb[3];
-
-	i = 0;
-	while (str[i] && i < 3)
-	{
-		j = -1;
-		while (++j < 3 && str[j])
-			if (str[j] < '0' || str[j] > '9')
-				return (-1);
-		if (str[j])
-			str[j++] = 0;
-		rgb[i] = ft_atoi(str);
-		if (rgb[i] < 0 || rgb[i] > 255)
-			return (-1);
-		if (i != 2 && str[j++] != ',')
-			return (false);
-		str += j;
-		++i;
-	}
-	if (i != 3 || *str != '\n')
-		return (-1);
-	return (rgb_to_hexa((char)rgb[0], (char)rgb[1], (char)rgb[2]));
-}
-
-bool	map_compare_direction(char *str, t_game *game)
-{
-	int	 i;
-
-	i = 0;
-	while (i < 4)
-	{
-		if (!ft_strncmp(str, g_textures[i], 2))
-		{
-			str += 2;
-			if (*str != ' ')
-				return (write(2, "Texture : wrong format\n", 24), false);
-			while (is_space(*str))
-				++str;
-			game->tex_path[i] = str;
-			while (*str && *str != '\n' && !is_space(*str))
-				++str;
-			if (*str)
-				*(str++) = 0;
-			while (is_space(*str))
-				++str;
-			if (*str != '\n')
-				return (write(2, "Texture : wrong format\n", 24), false);
-			return (true);
-		}
-		++i;
-	}	
-	if (*str == 'C' || *str == 'F')
-	{
-		++str;
-		if (!is_space(*str))
-			return (write(2, "Surface color : wrong format\n", 30), false);
-		while (is_space(*str))
-				++str;
-		game->surfaces_color[*str] = parse_rgb(str);
-		if (game->surfaces_color[*str] == -1)
-			return (write(2, "Surface color : not RGB\n", 25), false);
-		
-	}
-	return (write(2, "Texture : wrong format\n", 24), false);
-}
-
-/* ft_strncmp CHECK IF I DID RIGHT -------------------------- */
-bool	map_check_assets(t_parsing *parsing, t_game *game)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < 6)
-	{
-		while (is_empty(*parsing->map))
-			++(*(parsing->map));
-		while (is_space(*(parsing->map[i])))
-			++(*(parsing->map[i]));
-		j = 0;
-		while (j < 6)
-		{
-			if (ft_strncmp(parsing->map[i], g_direction[j], ))
-			j++;
-		}
-		i++;
-	}
-}
 
 void	map_check_format(char *filename)
 {
@@ -152,19 +25,6 @@ void	map_check_format(char *filename)
 		write(2, "Wrong file format\n", 19);
 		exit(1);
 	}
-}
-
-void	free_map(char **map, int size)
-{
-	int	i;
-
-	i = 0;
-	while (i < size)
-	{
-		free(*(map + i));
-		++i;
-	}
-	free(map);
 }
 
 bool	ft_realloc(t_parsing *parsing)
@@ -193,6 +53,19 @@ bool	ft_realloc(t_parsing *parsing)
 
 // Remove \n from map, add empty spaces to get a rectangle map
 
+
+/*test
+
+printf("Height of the map : %d, Max width : %d\n", game->map_h, game->map_w);
+	for (unsigned int k = 0; k < game->map_h; k++)
+	{
+		unsigned int l;
+		for (l = 0; l < game->map_w; l++)
+			printf("%c", game->map[k * game->map_w + l]);
+		printf("\n");
+	}
+*/
+
 bool	map_edit(t_parsing *parsing, t_game *game)
 {
 	int				i;
@@ -216,7 +89,7 @@ bool	map_edit(t_parsing *parsing, t_game *game)
 		while (j < parsing->map_max_w)
 			(game->map)[i * parsing->map_max_w + j++] = 32;
 	}
-	free_map(parsing->map, parsing->map_h);
+	//free_map(parsing->map, parsing->map_h);
 	game->map_h = parsing->map_h;
 	game->map_w = parsing->map_max_w;
 	printf("Height of the map : %d, Max width : %d\n", game->map_h, game->map_w);
@@ -227,6 +100,40 @@ bool	map_edit(t_parsing *parsing, t_game *game)
 			printf("%c", game->map[k * game->map_w + l]);
 		printf("\n");
 	}
+	return (true);
+}
+
+void	free_stack_array_ptr(char *array[], int size)
+{
+	int	i;
+
+	i = -1;
+	while (++i < size)
+		free(array[i]);
+}
+
+bool	map_assets_save(int fd, t_parsing *parsing)
+{
+	int	i;
+
+	i = 0;
+	parsing->line = 0;
+	parsing->lsize = 0;
+	while (i < 6 && get_next_line(fd, &parsing->line, &parsing->lsize))
+	{
+		if (!is_empty(parsing->line))
+		{
+			parsing->assets[i] = malloc(parsing->lsize + 1);
+			if (!parsing->assets[i])
+				return (free_stack_array_ptr(parsing->assets, i), false);
+			ft_strlcpy(parsing->assets[i], parsing->line, parsing->lsize + 1);
+			++i;
+		}
+		free(parsing->line);
+		parsing->line = 0;
+	}
+	if (i != 6)
+		return (write(2, "Error\nMissing assets\n", 23), false);
 	return (true);
 }
 
@@ -262,23 +169,16 @@ bool	map_save(int fd, t_parsing *parsing)
 	return (true);
 }
 
-bool	map_parse(char *filename, t_parsing *parsing, t_game *game)
+bool	map_parse(int fd, t_parsing *parsing, t_game *game)
 {
-	int fd;
-
-	fd = open(filename, O_RDONLY);
-	if (fd >= 0)
-	{
-		if (!map_save(fd, parsing))
-			return (close(fd), false);
-		close(fd);
-		if (!map_check_assets(parsing, game))
-			return (false);
-		if (!map_edit(parsing, game))
-			return (true);
-
-	}
-	perror("Couldn't open map");
+	if (!map_assets_save(fd, parsing))
+		return (false);
+	if (!map_check_assets(parsing, game))
+		return (false);
+	if (!map_save(fd, parsing))
+		return (free_stack_array_ptr(parsing->assets, 6), false);
+	if (!map_edit(parsing, game))
+		return (true);
 	return (false);
 }
 
@@ -286,6 +186,7 @@ int	main(int argc, char **argv)
 {
 	t_parsing	parsing;
 	t_game		game;
+	int			fd;
 
 	if (argc != 2)
 	{
@@ -293,9 +194,13 @@ int	main(int argc, char **argv)
 		return (-1);
 	}
 	map_check_format(argv[1]);
-	if (!map_parse(argv[1], &parsing, &game))
-		return (1);
-	
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		write(2, "Error\nCould't open map file\n", 30);
+	if (!map_parse(fd, &parsing, &game))
+		return (close(fd), -1);
+	printf("game_exec\n");
+	close(fd);
 	// parse(map);
 	return (0);
 }

@@ -30,8 +30,8 @@ enum	e_direction
 
 enum	e_surface
 {
-	F = 67,
-	C = 70
+	FLOOR,
+	CEILING
 };
 
 enum	e_keys
@@ -82,14 +82,15 @@ typedef struct	s_game
 	struct s_vector	ppos;
 	struct s_vector	pdir;
 	struct s_vector	plane;
-	char			tex_path[4];
+	char			*tex_path[4];
 	int				surfaces_color[2];
 	char			keys[4];
 }				t_game;
 
 typedef struct	s_parsing
 {
-	char		**map;
+	char			**map;
+	char			*assets[6];
 	int			alloc_size;
 	char 			*line;
 	unsigned int	lsize;
