@@ -10,7 +10,11 @@ void draw_textures(t_game *game, t_data *data, int start, int end)
 	int 	tex_x;
 
 	if (data->side == 0 && data->ray.x > 0)
-		text_id = 1;
+		text_id = SO;
+	else if (data->side == 1 && data->ray.y > 0)
+		text_id = EA;
+	else if (data->side == 1 && data->ray.y < 0)
+		text_id = WE;
 	if (data->side == 0)
 		wall_x = game->ppos.y + data->wall_dist * data->ray.y;
 	else

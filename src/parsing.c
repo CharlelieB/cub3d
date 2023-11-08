@@ -16,13 +16,13 @@ void	map_check_format(char *filename)
 		++i;
 	if (i < 5)
 	{
-		write(2, "Wrong file format\n", 19);
+		write(2, "Wrong file format\n", 18);
 		exit(1);
 	}
 	i -= 4;
 	if (ft_strncmp(filename + i, ".cub", 4))
 	{
-		write(2, "Wrong file format\n", 19);
+		write(2, "Wrong file format\n", 18);
 		exit(1);
 	}
 }
@@ -37,7 +37,7 @@ bool	ft_realloc(t_parsing *parsing)
 	new_map = malloc(parsing->alloc_size);
 	if (!new_map)
 	{
-		write(2, "Failed to realloc\n", 17);
+		write(2, "Failed to realloc\n", 18);
 		free_map(parsing->map, parsing->map_h);
 		return (false);
 	}
@@ -75,7 +75,7 @@ bool	map_edit(t_parsing *parsing, t_game *game)
 	game->map = malloc((--parsing->map_max_w) * parsing->map_h);
 	if (!game->map)
 	{
-		write(2, "Map allocation failed\n", 23);
+		write(2, "Map allocation failed\n", 22);
 		return (free_map(parsing->map, parsing->map_h), false);
 	}
 	while (++i < parsing->map_h)
@@ -133,7 +133,7 @@ bool	map_assets_save(int fd, t_parsing *parsing)
 		parsing->line = 0;
 	}
 	if (i != 6)
-		return (write(2, "Error\nMissing assets\n", 23), false);
+		return (write(2, "Error\nMissing assets\n", 21), false);
 	return (true);
 }
 
@@ -147,7 +147,7 @@ bool	map_save(int fd, t_parsing *parsing)
 	parsing->map = malloc(sizeof(char *) * parsing->alloc_size);
 	if (!parsing->map)
 	{
-		write(2, "Map allocation failed\n", 23);
+		write(2, "Map allocation failed\n", 22);
 		return (false);
 	}
 	while (get_next_line(fd, &parsing->line, &parsing->lsize))
@@ -189,17 +189,18 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		write(2, "Error\nPlease provide one argument\n", 36);
+		write(2, "Error\nPlease provide one argument\n", 34);
 		return (-1);
 	}
 	map_check_format(argv[1]);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
-		write(2, "Error\nCould't open map file\n", 30);
+		write(2, "Error\nCould't open map file\n", 28);
 	if (!map_parse(fd, &parsing, &game))
 		return (close(fd), -1);
 	close(fd);
-	printf("game_exec\n");
+	game_loop(&game);
+	//printf("game_exec\n");
 	free(game.map);
 	free_stack_array_ptr(parsing.assets, 6);
 	// parse(map);

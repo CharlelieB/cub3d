@@ -288,37 +288,54 @@ void	init(t_game *game)
 	game->keys[D] = 0;
 }
 
-void	test_texture(t_mlx *mlx)
+bool	load_textures(t_mlx *mlx, t_game *game)
 {
-	mlx->textures[0].mlx_img = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/redbrick.xpm", &mlx->textures[0].width, &mlx->textures[0].height);
-	if (mlx->textures[0].mlx_img == 0)
-		printf("error couldn't load texture\n");
-	mlx->textures[0].addr = mlx_get_data_addr(mlx->textures[0].mlx_img, &mlx->textures[0].bpp, &mlx->textures[0].line_len, &mlx->textures[0].endian);
-	if (mlx->textures[0].addr == 0)
-		printf("error couldn't get img addr\n");
-	mlx->textures[1].mlx_img = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/metalwall.xpm", &mlx->textures[1].width, &mlx->textures[1].height);
-	if (mlx->textures[1].mlx_img == 0)
-		printf("error couldn't load texture\n");
-	mlx->textures[1].addr = mlx_get_data_addr(mlx->textures[1].mlx_img, &mlx->textures[1].bpp, &mlx->textures[1].line_len, &mlx->textures[1].endian);
-	if (mlx->textures[1].addr == 0)
-		printf("error couldn't get img addr\n");
+	int	i;
+
+	i = 0;
+	while (i < 4)
+	{
+		mlx->textures[i].mlx_img = mlx_xpm_file_to_image(mlx->mlx_ptr,
+			game->tex_path[i], &mlx->textures[i].width, &mlx->textures[i].height);
+		if (mlx->textures[i].mlx_img == 0)
+		{
+			write(2, "Error\nCouldn't load texture\n", 28);
+			return (false);
+		}
+		mlx->textures[i].addr = mlx_get_data_addr(mlx->textures[i].mlx_img,
+			&mlx->textures[i].bpp, &mlx->textures[i].line_len, &mlx->textures[i].endian);
+		if (mlx->textures[i].addr == 0)
+		{
+			write(2, "Error\nCouldn't get img addr\n", 28);
+			return (false);
+			//TODO: Destroy image if error !!
+		}
+		// mlx->textures[1].mlx_img = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/metalwall.xpm", &mlx->textures[1].width, &mlx->textures[1].height);
+		// if (mlx->textures[1].mlx_img == 0)
+		// 	printf("error couldn't load texture\n");
+		// mlx->textures[1].addr = mlx_get_data_addr(mlx->textures[1].mlx_img, &mlx->textures[1].bpp, &mlx->textures[1].line_len, &mlx->textures[1].endian);
+		// if (mlx->textures[1].addr == 0)
+			// printf("error couldn't get img addr\n");
+		++i;
+	}
+	return (true);
 }
 
-int	main(void)
+bool	game_loop(t_game *game)
 {
-	t_game game;
 	t_mlx mlx;
 
-	game.mlx = &mlx;
+	game->mlx = &mlx;
 	if (!set_img(&mlx))
-		return (1);
+		return (false);
 	//parser
-	test_texture(&mlx);
-	init(&game);
+	if (!load_textures(&mlx, game))
+		return (false);
+	init(game);
 	//game_loop_start
-	draw(&game);
-	render(&game);
-	mlx_functions(&game);
+	draw(game);
+	render(game);
+	mlx_functions(game);
 	free_memory(&mlx);
-	return (0);
+	return (true);
 }

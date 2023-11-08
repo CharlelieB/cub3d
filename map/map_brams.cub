@@ -1,7 +1,7 @@
-NO ./textures/stone12.xpm
-SO ./textures/stone2.xpm
-WE ./textures/stone3.xpm
-EA ./textures/stone4.xpm
+SO ./textures/redbrick.xpm
+NO ./textures/wood.xpm
+WE ./textures/greystone.xpm
+EA ./textures/bluestone.xpm
 
 F 240,211,117
 C 84,171,179

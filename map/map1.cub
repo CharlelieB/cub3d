@@ -1,7 +1,7 @@
-NO ./textures/north64.xpm
-SO ./textures/south64.xpm
-WE ./textures/west64.xpm
-EA ./textures/east64.xpm
+SO ./textures/redbrick.xpm
+NO ./textures/wood.xpm
+WE ./textures/greystone.xpm
+EA ./textures/bluestone.xpm
 
 F 240,211,117
 C 84,171,179

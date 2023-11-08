@@ -65,15 +65,15 @@ bool	map_compare_surfaces(char *str, t_game *game)
 			i = CEILING;
 		++str;
 		if (!is_space(*str))
-			return (write(2, "Error\nSurface : wrong format\n", 31), false);
+			return (write(2, "Error\nSurface : wrong format\n", 29), false);
 		while (is_space(*str))
 				++str;
 		game->surfaces_color[i] = parse_rgb(str);
 		if (game->surfaces_color[i] == -1)
-			return (write(2, "Error\nSurface : not RGB\n", 26), false);
+			return (write(2, "Error\nSurface : not RGB\n", 24), false);
 		return (true);
 	}
-	return (write(2, "Error\nTexture : wrong format\n", 31), false);
+	return (write(2, "Error\nTexture : wrong format\n", 29), false);
 }
 bool	map_compare_direction(char *str, t_game *game)
 {
@@ -86,7 +86,7 @@ bool	map_compare_direction(char *str, t_game *game)
 		{
 			str += 2;
 			if (!is_space(*str))
-				return (write(2, "Error\nTexture : wrong format\n", 31), false);
+				return (write(2, "Error\nTexture : wrong format\n", 29), false);
 			while (is_space(*str))
 				++str;
 			game->tex_path[i] = str;
@@ -97,7 +97,7 @@ bool	map_compare_direction(char *str, t_game *game)
 			while (is_space(*str) && *str)
 				++str;
 			if (*str != 0)
-				return (write(2, "Error\nTexture : wrong format\n", 31), false);
+				return (write(2, "Error\nTexture : wrong format\n", 29), false);
 			return (true);
 		}
 	}
