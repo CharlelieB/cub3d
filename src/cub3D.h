@@ -96,6 +96,7 @@ typedef struct	s_parsing
 	unsigned int	lsize;
 	int				map_h;
 	unsigned int	map_max_w;
+	bool			player_found;
 }				t_parsing;
 
 typedef struct s_data

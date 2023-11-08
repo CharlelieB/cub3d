@@ -16,13 +16,13 @@ void	map_check_format(char *filename)
 		++i;
 	if (i < 5)
 	{
-		write(2, "Wrong file format\n", 18);
+		write(2, "Error\nWrong file format\n", 24);
 		exit(1);
 	}
 	i -= 4;
 	if (ft_strncmp(filename + i, ".cub", 4))
 	{
-		write(2, "Wrong file format\n", 18);
+		write(2, "Error\nWrong file format\n", 24);
 		exit(1);
 	}
 }
@@ -66,6 +66,47 @@ printf("Height of the map : %d, Max width : %d\n", game->map_h, game->map_w);
 	}
 */
 
+void	setup_player(char c, t_game *game, int y, int x)
+{
+	game->ppos.x = x;
+	game->ppos.y = y;
+	game->pdir.y = 0;
+	game->pdir.x = 0;
+	if (c == 'N')
+		game->pdir.y = 1;
+	else if (c == 'S')
+		game->pdir.y = -1;
+	else if (c == 'W')
+		game->pdir.x = -1;
+	else if (c == 'E')
+		game->pdir.x = 1;
+	if (!game->pdir.y)
+	{
+		game->plane.x = 0;
+		game->plane.y = 0.66;
+	}
+	else {
+		game->plane.x = 0.66;
+		game->plane.y = 0;
+	}
+}
+
+bool	map_char_checker(t_parsing *parsing, t_game *game, int i, int j)
+{
+	char c;
+
+	c = parsing->map[i][j];
+	if (c == 'W' || c == 'N' || c == 'S' || c == 'E')
+	{
+		if (parsing->player_found)
+			return (false);
+		else
+			parsing->player_found = true;
+		return (setup_player(c, game, i, j), true);
+	}
+	return (is_space(c) || c == '0' || c == '1');
+}
+
 bool	map_edit(t_parsing *parsing, t_game *game)
 {
 	int				i;
@@ -83,12 +124,16 @@ bool	map_edit(t_parsing *parsing, t_game *game)
 		j = 0;
 		while (parsing->map[i][j] && parsing->map[i][j] != '\n')
 		{
+			if (!map_char_checker(parsing, game, i, j))
+				return (false);
 			(game->map)[i * parsing->map_max_w + j] = parsing->map[i][j];
 			++j;
 		}
 		while (j < parsing->map_max_w)
 			(game->map)[i * parsing->map_max_w + j++] = 32;
 	}
+	if (!parsing->player_found)
+		return (write(2, "Error\nNo player\n", 16), false);
 	game->map_h = parsing->map_h;
 	game->map_w = parsing->map_max_w;
 	free_map(parsing->map, parsing->map_h);
@@ -170,6 +215,7 @@ bool	map_save(int fd, t_parsing *parsing)
 
 bool	map_parse(int fd, t_parsing *parsing, t_game *game)
 {
+	parsing->player_found = false;
 	if (!map_assets_save(fd, parsing))
 		return (false);
 	if (!map_check_assets(parsing, game))
@@ -178,6 +224,8 @@ bool	map_parse(int fd, t_parsing *parsing, t_game *game)
 		return (free_stack_array_ptr(parsing->assets, 6), false);
 	if (!map_edit(parsing, game))
 		return (free(game->map), false);
+	if (!flood_fill(game, game->ppos.x, game->ppos.y))
+		return (write(2, "Error\nMap format\n", 17), false);
 	return (true);
 }
 
