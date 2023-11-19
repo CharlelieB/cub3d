@@ -31,7 +31,7 @@ enum	e_direction
 enum	e_surface
 {
 	FLOOR,
-	CEILING
+	SKY
 };
 
 enum	e_keys

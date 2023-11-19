@@ -3,37 +3,6 @@
 #include <math.h>
 #include <float.h>
 
-//#define PLAYER_DIR NORTH
-
-/*
-int map[MAP_W * MAP_H] = {
-	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,
-	1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,
-	1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,
-	1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-};
-*/
-
 float	ft_fabs(float nb)
 {
 	if (nb < 0)
@@ -81,7 +50,6 @@ bool	render(t_game *game)
 	if (game->mlx->win_ptr == NULL)
 		return (false);
 	mlx_put_image_to_window(game->mlx->mlx_ptr, game->mlx->win_ptr, game->mlx->img.mlx_img, 0, 0);
-	//mlx_put_image_to_window(game->mlx->mlx_ptr, game->mlx->win_ptr, game->mlx->textures[0].mlx_img, 0, 0);
 	return (true);
 }
 
@@ -106,31 +74,33 @@ void draw(t_game *game)
 {
 	int	i;
 	int	j;
+	int	color;
 
 	i = 0;
 	for (; i < SCREEN_H_HALF; ++i)
 	{
 		for (j = 0; j < SCREEN_W; ++j)
-			ft_pixel_put(&game->mlx->img, j, i, 0x6ac7f9);
+			ft_pixel_put(&game->mlx->img, j, i, game->surfaces_color[SKY]);
 	}
 	for (i = SCREEN_H_HALF; i < SCREEN_H; ++i)
 	{
 		for (j = 0; j < SCREEN_W; ++j)
-			ft_pixel_put(&game->mlx->img, j, i, 0xffeb7b);
+			ft_pixel_put(&game->mlx->img, j, i, game->surfaces_color[FLOOR]);
 	}
 	for (i = 0; i < SCREEN_W; i++)
 		raycasting(game, i);
-	// for (i = 0; i < (int)game->map_w; i++)
-	// {
-	// 	for (j = 0; j < (int)game->map_h; j++)
-	// 	{
-	// 		if (game->map[i + (game->map_w * j)] == '1')
-	// 		{
-	// 			draw_square(&game->mlx->img, i * 2, j * 2, 0x5FF236, 4);
-	// 		}
-	// 	}
-	// }
-	//draw_square(&game->mlx->img, (int)(game->ppos.x * 4), (int)(game->ppos.y * 4), 0x36A4F2, 4);
+	for (i = 0; i < (int)game->map_w; i++)
+	{
+		for (j = 0; j < (int)game->map_h; j++)
+		{
+			if (game->map[i + (game->map_w * j)] == '1')
+				color = 0xFFFFFF;
+			else
+				color = 0;
+			draw_square(&game->mlx->img, i * 4, j * 4, color, 4);
+		}
+	}
+	draw_square(&game->mlx->img, (int)(game->ppos.x * 4), (int)(game->ppos.y * 4), 0xff3333, 4);
 }
 
 int	handle_no_event(void *game)
@@ -186,7 +156,6 @@ void	move_direction(int key, t_game *game)
 		game->plane.x = old_plane_x * cos(-game->rot) - game->plane.y * sin(-game->rot);
 		game->plane.y = old_plane_x * sin(-game->rot) + game->plane.y * cos(-game->rot);
 	}
-	// printf("Before %.10f %.10f\n", game->pdir.x, game->pdir.y);
 	ft_clear_image(&game->mlx->img);
 	draw(game);
 	render(game);
@@ -196,10 +165,6 @@ int	handle_keypress(int keysym, t_game *game)
 {
 	if (keysym == XK_Escape)
 		mlx_loop_end(game->mlx->mlx_ptr);
-	// if (keysym == XK_w || keysym == XK_s)
-	// 	move_player(keysym, game);
-	// if (keysym == XK_a || keysym == XK_d)
-	// 	move_direction(keysym, game);
 	if (game->keys[W])
 		move_player(W, game);
 	else if (game->keys[S])
@@ -291,12 +256,6 @@ bool	load_textures(t_mlx *mlx, t_game *game)
 			return (false);
 			//TODO: Destroy image if error !!
 		}
-		// mlx->textures[1].mlx_img = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/metalwall.xpm", &mlx->textures[1].width, &mlx->textures[1].height);
-		// if (mlx->textures[1].mlx_img == 0)
-		// 	printf("error couldn't load texture\n");
-		// mlx->textures[1].addr = mlx_get_data_addr(mlx->textures[1].mlx_img, &mlx->textures[1].bpp, &mlx->textures[1].line_len, &mlx->textures[1].endian);
-		// if (mlx->textures[1].addr == 0)
-			// printf("error couldn't get img addr\n");
 		++i;
 	}
 	return (true);

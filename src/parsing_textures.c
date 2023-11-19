@@ -60,7 +60,7 @@ bool	map_compare_surfaces(char *str, t_game *game)
 	if (*str == 'C' || *str == 'F')
 	{
 		if (*str == 'C')
-			i = CEILING;
+			i = SKY;
 		++str;
 		if (!is_space(*str))
 			return (write(2, "Error\nSurface : wrong format\n", 29), false);

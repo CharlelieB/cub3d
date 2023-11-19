@@ -137,14 +137,6 @@ bool	map_edit(t_parsing *parsing, t_game *game)
 	game->map_h = parsing->map_h;
 	game->map_w = parsing->map_max_w;
 	free_map(parsing->map, parsing->map_h);
-	printf("Height of the map : %d, Max width : %d\n", game->map_h, game->map_w);
-	for (unsigned int k = 0; k < game->map_h; k++)
-	{
-		unsigned int l;
-		for (l = 0; l < game->map_w; l++)
-			printf("%c", game->map[k * game->map_w + l]);
-		printf("\n");
-	}
 	return (true);
 }
 
