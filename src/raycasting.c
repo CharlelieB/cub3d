@@ -118,7 +118,7 @@ void ray_loop(t_data *data, t_game *game)
 			data->map_y += data->step_y;
 			data->side = 1;
 		}
-		if (game->map[data->map_x + (data->map_y * game->map_w)] == 1)
+		if (game->map[data->map_x + (data->map_y * game->map_w)] == '1')
 			hit = 1;
 	}
 }
@@ -133,6 +133,7 @@ void raycasting(t_game *game, int x)
 	data.ray.y = game->pdir.y + game->plane.y * camera_x;
 	data.map_x = (int)game->ppos.x;
 	data.map_y = (int)game->ppos.y;
+
 	dda_init(game, &data);
 	ray_loop(&data, game);
 	draw_walls(game, &data);

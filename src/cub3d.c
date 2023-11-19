@@ -104,7 +104,6 @@ void draw_square(t_img *img, int x, int y, int color, int size)
 
 void draw(t_game *game)
 {
-	printf("%u %u\n", game->map_w, game->map_h);
 	int	i;
 	int	j;
 
@@ -125,7 +124,7 @@ void draw(t_game *game)
 	// {
 	// 	for (j = 0; j < (int)game->map_h; j++)
 	// 	{
-	// 		if (game->map[i + (game->map_w * j)] == 1)
+	// 		if (game->map[i + (game->map_w * j)] == '1')
 	// 		{
 	// 			draw_square(&game->mlx->img, i * 2, j * 2, 0x5FF236, 4);
 	// 		}
@@ -146,19 +145,19 @@ void	move_player(int key, t_game *game)
 	// float	x, y;
 	float	speed;
 
-	speed = 0.2;
+	speed = 0.4;
 	if (key == W)
 	{
-		if(game->map[(int)(game->ppos.x + game->pdir.x * speed) + (game->map_w * (int)game->ppos.y)] != 1) 
+		if(game->map[(int)(game->ppos.x + game->pdir.x * speed) + (game->map_w * (int)game->ppos.y)] != '1') 
 			game->ppos.x += game->pdir.x * speed;
-		if(game->map[(int)game->ppos.x + (game->map_w * (int)(game->ppos.y + game->pdir.y * speed))] != 1) 
+		if(game->map[(int)game->ppos.x + (game->map_w * (int)(game->ppos.y + game->pdir.y * speed))] != '1') 
 			game->ppos.y += game->pdir.y * speed;
 	}
 	else if (key == S)
 	{  
-		if(game->map[(int)(game->ppos.x - game->pdir.x * speed) + (game->map_w * (int)game->ppos.y)] != 1) 
+		if(game->map[(int)(game->ppos.x - game->pdir.x * speed) + (game->map_w * (int)game->ppos.y)] != '1') 
 			game->ppos.x -= game->pdir.x * speed;
-		if(game->map[(int)game->ppos.x + (game->map_w * (int)(game->ppos.y - game->pdir.y * speed))] != 1) 
+		if(game->map[(int)game->ppos.x + (game->map_w * (int)(game->ppos.y - game->pdir.y * speed))] != '1') 
 			game->ppos.y -= game->pdir.y * speed;
 	}
 	ft_clear_image(&game->mlx->img);
@@ -170,24 +169,22 @@ void	move_direction(int key, t_game *game)
 {
 	float	old_x;
 	float	old_plane_x;
-	float	rot;
 
-	rot = M_PI/180 * 2;
 	old_x = game->pdir.x;
 	old_plane_x = game->plane.x;
 	if (key == D)
 	{
-		game->pdir.x = old_x * cos(rot) - game->pdir.y * sin(rot);
-		game->pdir.y = old_x * sin(rot) + game->pdir.y * cos(rot);
-		game->plane.x = old_plane_x * cos(rot) - game->plane.y * sin(rot);
-		game->plane.y = old_plane_x * sin(rot) + game->plane.y * cos(rot);
+		game->pdir.x = old_x * cos(game->rot) - game->pdir.y * sin(game->rot);
+		game->pdir.y = old_x * sin(game->rot) + game->pdir.y * cos(game->rot);
+		game->plane.x = old_plane_x * cos(game->rot) - game->plane.y * sin(game->rot);
+		game->plane.y = old_plane_x * sin(game->rot) + game->plane.y * cos(game->rot);
 	}
 	else if (key == A)
 	{
-		game->pdir.x = old_x * cos(-rot) - game->pdir.y * sin(-rot);
-		game->pdir.y = old_x * sin(-rot) + game->pdir.y * cos(-rot);
-		game->plane.x = old_plane_x * cos(-rot) - game->plane.y * sin(-rot);
-		game->plane.y = old_plane_x * sin(-rot) + game->plane.y * cos(-rot);
+		game->pdir.x = old_x * cos(-game->rot) - game->pdir.y * sin(-game->rot);
+		game->pdir.y = old_x * sin(-game->rot) + game->pdir.y * cos(-game->rot);
+		game->plane.x = old_plane_x * cos(-game->rot) - game->plane.y * sin(-game->rot);
+		game->plane.y = old_plane_x * sin(-game->rot) + game->plane.y * cos(-game->rot);
 	}
 	// printf("Before %.10f %.10f\n", game->pdir.x, game->pdir.y);
 	ft_clear_image(&game->mlx->img);
@@ -262,10 +259,10 @@ void	mlx_functions(t_game *game)
 
 void	init(t_game *game)
 {
-	// game->pdir.x = 1;
-	// game->pdir.y = 0;
-	// game->plane.x = 0;
-	// game->plane.y = 0.66; //change based on player direction
+	if (game->pdir.y == -1 || game->pdir.x == 1)
+		game->rot = (M_PI/180 * 4);
+	else
+		game->rot = -(M_PI/180 * 4);
 	game->keys[W] = 0;
 	game->keys[A] = 0;
 	game->keys[S] = 0;

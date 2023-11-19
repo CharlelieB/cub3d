@@ -8,8 +8,8 @@
 # include <stdbool.h>
 # include "libft.h"
 
-#define SCREEN_W 640
-#define SCREEN_H 400
+#define SCREEN_W 1280
+#define SCREEN_H 800
 #define SCREEN_H_HALF 200
 #define TEX_W 64
 #define TEX_H 64
@@ -85,6 +85,7 @@ typedef struct	s_game
 	char			*tex_path[4];
 	int				surfaces_color[2];
 	char			keys[4];
+	float			rot;
 }				t_game;
 
 typedef struct	s_parsing
