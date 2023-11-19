@@ -2,11 +2,9 @@
 
 bool	flood_fill(t_game *game, int x, int y)
 {
-	int index;
-	int	player;
+	int	index;
 
 	index = x + y * game->map_w;
-	player = (int)(game->ppos.x + game->ppos.y * game->map_w);
 	if (game->map[index] == '1' || game->map[index] == '2')
 		return (true);
 	if (x == 0 || x == (int)game->map_w - 1

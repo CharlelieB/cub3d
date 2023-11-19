@@ -11,10 +11,8 @@ static const char *g_textures[] =
 
 bool	rgb_tokens(char *str, char *rgb[])
 {
-	int	i;
 	int	count;
 
-	i = 0;
 	count = 0;
 	rgb[count] = str;
 	while (*str)

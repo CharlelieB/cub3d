@@ -13,12 +13,12 @@
 #define SCREEN_H_HALF 200
 #define TEX_W 64
 #define TEX_H 64
-#define MAP_W 24
-#define MAP_H 24
+// #define MAP_W 24
+// #define MAP_H 24
 
 typedef float t_f;
 
-extern int map[MAP_W * MAP_H];
+//extern int map[MAP_W * MAP_H];
 
 enum	e_direction
 {
