@@ -1,2 +1,5 @@
 *.swp
 *.vscode
+.DS_Store
+obj/
+cub3d
