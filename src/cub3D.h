@@ -129,7 +129,6 @@ typedef struct s_line
 bool	game_loop(t_game *game);
 bool	set_img(t_mlx *mlx);
 void	free_memory(t_mlx *mlx);
-void	draw_line(t_vector_int start, t_vector_int end, t_img *img);
 void	ft_pixel_put(t_img *img, int x, int y, int color);
 void	raycasting(t_game *game, int x);
 float	ft_fabs(float nb);

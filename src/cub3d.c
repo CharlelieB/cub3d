@@ -118,16 +118,16 @@ void	move_player(int key, t_game *game)
 	speed = 0.4;
 	if (key == W)
 	{
-		if(game->map[(int)(game->ppos.x + game->pdir.x * speed) + (game->map_w * (int)game->ppos.y)] != '1') 
+		//if(game->map[(int)(game->ppos.x + game->pdir.x * speed)+ (game->map_w * (int)game->ppos.y)] != '1') 
 			game->ppos.x += game->pdir.x * speed;
-		if(game->map[(int)game->ppos.x + (game->map_w * (int)(game->ppos.y + game->pdir.y * speed))] != '1') 
+		//if(game->map[(int)game->ppos.x + (game->map_w * (int)(game->ppos.y + game->pdir.y * speed))] != '1') 
 			game->ppos.y += game->pdir.y * speed;
 	}
 	else if (key == S)
 	{  
-		if(game->map[(int)(game->ppos.x - game->pdir.x * speed) + (game->map_w * (int)game->ppos.y)] != '1') 
+		//if(game->map[(int)(game->ppos.x - game->pdir.x * speed) + (game->map_w * (int)game->ppos.y)] != '1') 
 			game->ppos.x -= game->pdir.x * speed;
-		if(game->map[(int)game->ppos.x + (game->map_w * (int)(game->ppos.y - game->pdir.y * speed))] != '1') 
+		//if(game->map[(int)game->ppos.x + (game->map_w * (int)(game->ppos.y - game->pdir.y * speed))] != '1') 
 			game->ppos.y -= game->pdir.y * speed;
 	}
 	ft_clear_image(&game->mlx->img);
@@ -272,7 +272,6 @@ bool	game_loop(t_game *game)
 	if (!load_textures(&mlx, game))
 		return (false);
 	init(game);
-	//game_loop_start
 	draw(game);
 	render(game);
 	mlx_functions(game);

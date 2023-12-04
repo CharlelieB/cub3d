@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_textures.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/04 14:45:19 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/12/04 14:56:18 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 #include "parsing.h"
 
-static const char *g_textures[] = 
-{
+static const char	*g_textures[] = {
 	"NO",
 	"SO",
 	"WE",
@@ -73,9 +84,10 @@ bool	map_compare_surfaces(char *str, t_game *game)
 	}
 	return (write(2, "Error\nTexture : wrong format\n", 29), false);
 }
+
 bool	map_compare_direction(char *str, t_game *game)
 {
-	int	 i;
+	int	i;
 
 	i = -1;
 	while (++i < 4)

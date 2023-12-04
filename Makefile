@@ -1,8 +1,7 @@
 NAME := cub3D
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
-SRCS := parsing.c parsing_textures.c parsing_utils.c parsing_map.c mlx_utils.c cub3d.c line.c raycasting.c
-#SRCS := mlx_utils.c test.c line.c raycasting.c
+SRCS := main.c parsing.c parsing_textures.c parsing_utils.c parsing_map.c mlx_utils.c cub3d.c raycasting.c
 OBJ_DIR := obj
 SRC_DIR := src
 SRCS := $(SRCS:%=$(SRC_DIR)/%)

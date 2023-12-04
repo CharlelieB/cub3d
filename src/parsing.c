@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/04 14:56:50 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/12/04 16:29:12 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 #include "parsing.h"
 #include <stdlib.h>
@@ -30,7 +42,7 @@ void	map_check_format(char *filename)
 bool	ft_realloc(t_parsing *parsing)
 {
 	char	**new_map;
-	int				i;
+	int		i;
 
 	i = 0;
 	parsing->alloc_size = ft_next_power(parsing->alloc_size);
@@ -52,10 +64,7 @@ bool	ft_realloc(t_parsing *parsing)
 }
 
 // Remove \n from map, add empty spaces to get a rectangle map
-
-
 /*test
-
 printf("Height of the map : %d, Max width : %d\n", game->map_h, game->map_w);
 	for (unsigned int k = 0; k < game->map_h; k++)
 	{
@@ -85,7 +94,8 @@ void	setup_player(char c, t_game *game, int y, int x)
 		game->plane.x = 0;
 		game->plane.y = 0.66;
 	}
-	else {
+	else
+	{
 		game->plane.x = 0.66;
 		game->plane.y = 0;
 	}
@@ -93,7 +103,7 @@ void	setup_player(char c, t_game *game, int y, int x)
 
 bool	map_char_checker(t_parsing *parsing, t_game *game, int i, int j)
 {
-	char c;
+	char	c;
 
 	c = parsing->map[i][j];
 	if (c == 'W' || c == 'N' || c == 'S' || c == 'E')
@@ -136,8 +146,7 @@ bool	map_edit(t_parsing *parsing, t_game *game)
 		return (write(2, "Error\nNo player\n", 16), false);
 	game->map_h = parsing->map_h;
 	game->map_w = parsing->map_max_w;
-	free_map(parsing->map, parsing->map_h);
-	return (true);
+	return (free_map(parsing->map, parsing->map_h), true);
 }
 
 void	free_stack_array_ptr(char *array[], int size)
@@ -183,10 +192,7 @@ bool	map_save(int fd, t_parsing *parsing)
 	parsing->alloc_size = 32;
 	parsing->map = malloc(sizeof(char *) * parsing->alloc_size);
 	if (!parsing->map)
-	{
-		write(2, "Map allocation failed\n", 22);
-		return (false);
-	}
+		return (write(2, "Map allocation failed\n", 22), false);
 	while (get_next_line(fd, &parsing->line, &parsing->lsize))
 	{
 		if (parsing->map_h > parsing->alloc_size)
@@ -202,6 +208,7 @@ bool	map_save(int fd, t_parsing *parsing)
 		parsing->line = 0;
 		++parsing->map_h;
 	}
+	printf("%d\n", parsing->map_h);
 	return (true);
 }
 
@@ -219,30 +226,4 @@ bool	map_parse(int fd, t_parsing *parsing, t_game *game)
 	if (!flood_fill(game, game->ppos.x, game->ppos.y))
 		return (write(2, "Error\nMap format\n", 17), false);
 	return (true);
-}
-
-int	main(int argc, char **argv)
-{
-	t_parsing	parsing;
-	t_game		game;
-	int			fd;
-
-	if (argc != 2)
-	{
-		write(2, "Error\nPlease provide one argument\n", 34);
-		return (-1);
-	}
-	map_check_format(argv[1]);
-	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
-		write(2, "Error\nCould't open map file\n", 28);
-	if (!map_parse(fd, &parsing, &game))
-		return (close(fd), -1);
-	close(fd);
-	game_loop(&game);
-	//printf("game_exec\n");
-	free(game.map);
-	free_stack_array_ptr(parsing.assets, 6);
-	// parse(map);
-	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mlx_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/04 14:37:45 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/12/04 14:44:47 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 
 bool	set_img(t_mlx *mlx)
@@ -12,7 +24,8 @@ bool	set_img(t_mlx *mlx)
 		return (false);
 	}
 	mlx->img.mlx_img = mlx_new_image(mlx->mlx_ptr, SCREEN_W, SCREEN_H);
-	mlx->img.addr = mlx_get_data_addr(mlx->img.mlx_img, &mlx->img.bpp, &mlx->img.line_len, &mlx->img.endian);
+	mlx->img.addr = mlx_get_data_addr(mlx->img.mlx_img, &mlx->img.bpp,
+			&mlx->img.line_len, &mlx->img.endian);
 	return (true);
 }
 
