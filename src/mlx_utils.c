@@ -6,11 +6,18 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:37:45 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/04 14:44:47 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/04 17:07:03 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+void	mlx_functions(t_game *game)
+{
+	mlx_hook(game->mlx->win_ptr, KeyPress, KeyPressMask, &set_key_press, game);
+	mlx_hook(game->mlx->win_ptr, KeyRelease, KeyReleaseMask, &set_key_release, game);
+	mlx_loop(game->mlx->mlx_ptr);
+}
 
 bool	set_img(t_mlx *mlx)
 {

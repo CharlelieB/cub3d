@@ -78,6 +78,7 @@ typedef struct	s_game
 	char			*map;
 	unsigned int	map_h;
 	unsigned int	map_w;
+	unsigned int	map_s;
 	struct s_mlx	*mlx;
 	struct s_vector	ppos;
 	struct s_vector	pdir;
@@ -127,10 +128,17 @@ typedef struct s_line
 }				t_line;
 
 bool	game_loop(t_game *game);
+bool	render(t_game *game);
+void 	draw(t_game *game);
+void	ft_clear_image(t_img *img);
 bool	set_img(t_mlx *mlx);
 void	free_memory(t_mlx *mlx);
 void	ft_pixel_put(t_img *img, int x, int y, int color);
 void	raycasting(t_game *game, int x);
-float	ft_fabs(float nb);
+int		set_key_press(int keysym, t_game *game);
+int		set_key_release(int keysym, t_game *game);
+void	mlx_functions(t_game *game);
+void	move_player(int key, t_game *game);
+void	move_direction(int key, t_game *game);
 
 #endif

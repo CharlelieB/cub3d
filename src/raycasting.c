@@ -5,10 +5,11 @@
 
 void draw_textures(t_game *game, t_data *data, int start, int end)
 {
-	int 	text_id = 0;
+	int 	text_id;
 	float 	wall_x;
 	int 	tex_x;
 
+	text_id = 0; 
 	if (data->side == 0 && data->ray.x > 0)
 		text_id = SO;
 	else if (data->side == 1 && data->ray.y > 0)
@@ -41,9 +42,9 @@ void draw_walls(t_game *game, t_data *data)
 	int end;
 
 	if (data->side == 0)
-		data->wall_dist = ft_fabs(data->side_x - data->delta_x);
+		data->wall_dist = fabs(data->side_x - data->delta_x);
 	else
-		data->wall_dist = ft_fabs(data->side_y - data->delta_y);
+		data->wall_dist = fabs(data->side_y - data->delta_y);
 	if (data->wall_dist)
 		data->wall_height = ft_abs((int)(SCREEN_H / data->wall_dist));
 	else
@@ -72,11 +73,11 @@ void dda_init(t_game *game, t_data *data)
 	if (data->ray.x == 0)
 		data->delta_x = 1.0e30f;
 	else
-		data->delta_x = ft_fabs(1 / data->ray.x);
+		data->delta_x = fabs(1 / data->ray.x);
 	if (data->ray.y == 0)
 		data->delta_y = 1.0e30f;
 	else
-		data->delta_y = ft_fabs(1 / data->ray.y);
+		data->delta_y = fabs(1 / data->ray.y);
 	if (data->ray.x < 0)
 	{
 		data->step_x = -1;
@@ -99,12 +100,11 @@ void dda_init(t_game *game, t_data *data)
 	}
 }
 
-void ray_loop(t_data *data, t_game *game)
+bool	ray_loop(t_data *data, t_game *game)
 {
-	int hit;
+	int	map_coord;
 
-	hit = 0;
-	while (hit == 0)
+	while (true)
 	{
 		if (data->side_x < data->side_y)
 		{
@@ -118,9 +118,13 @@ void ray_loop(t_data *data, t_game *game)
 			data->map_y += data->step_y;
 			data->side = 1;
 		}
-		if (game->map[data->map_x + (data->map_y * game->map_w)] == '1')
-			hit = 1;
+		map_coord = data->map_x + (data->map_y * game->map_w);
+		if (map_coord < 0 || map_coord > (int)(game->map_s - 1))
+			return (false);
+		if (game->map[map_coord] == '1')
+			break ;
 	}
+	return (true);
 }
 
 void raycasting(t_game *game, int x)
@@ -131,10 +135,10 @@ void raycasting(t_game *game, int x)
 	data.screen_x = x;
 	data.ray.x = game->pdir.x + game->plane.x * camera_x;
 	data.ray.y = game->pdir.y + game->plane.y * camera_x;
-	data.map_x = (int)game->ppos.x;
-	data.map_y = (int)game->ppos.y;
-
+	data.map_x = (int)(game->ppos.x);
+	data.map_y = (int)(game->ppos.y);
+	printf("%d %d\n", data.map_x, data.map_y);
 	dda_init(game, &data);
-	ray_loop(&data, game);
-	draw_walls(game, &data);
+	if (ray_loop(&data, game))
+		draw_walls(game, &data);
 }

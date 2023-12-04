@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:56:50 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/04 16:29:12 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/04 18:43:05 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ printf("Height of the map : %d, Max width : %d\n", game->map_h, game->map_w);
 
 void	setup_player(char c, t_game *game, int y, int x)
 {
-	game->ppos.x = x;
-	game->ppos.y = y;
+	game->ppos.x = x + 0.5;
+	game->ppos.y = y + 0.5;
 	game->pdir.y = 0;
 	game->pdir.x = 0;
 	if (c == 'N')
@@ -146,6 +146,7 @@ bool	map_edit(t_parsing *parsing, t_game *game)
 		return (write(2, "Error\nNo player\n", 16), false);
 	game->map_h = parsing->map_h;
 	game->map_w = parsing->map_max_w;
+	game->map_s = game->map_h * game->map_w;
 	return (free_map(parsing->map, parsing->map_h), true);
 }
 
@@ -208,7 +209,6 @@ bool	map_save(int fd, t_parsing *parsing)
 		parsing->line = 0;
 		++parsing->map_h;
 	}
-	printf("%d\n", parsing->map_h);
 	return (true);
 }
 
