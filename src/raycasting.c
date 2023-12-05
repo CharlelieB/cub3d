@@ -119,7 +119,8 @@ bool	ray_loop(t_data *data, t_game *game)
 			data->side = 1;
 		}
 		map_coord = data->map_x + (data->map_y * game->map_w);
-		if (map_coord < 0 || map_coord > (int)(game->map_s - 1))
+		if (data->map_x < 0 || data->map_x >= (int)game->map_w || data->map_y < 0 ||
+		data->map_y >= (int)game->map_h)
 			return (false);
 		if (game->map[map_coord] == '1')
 			break ;
@@ -137,7 +138,6 @@ void raycasting(t_game *game, int x)
 	data.ray.y = game->pdir.y + game->plane.y * camera_x;
 	data.map_x = (int)(game->ppos.x);
 	data.map_y = (int)(game->ppos.y);
-	printf("%d %d\n", data.map_x, data.map_y);
 	dda_init(game, &data);
 	if (ray_loop(&data, game))
 		draw_walls(game, &data);
