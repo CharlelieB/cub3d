@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:32:12 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 16:32:18 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/05 17:42:48 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ int	main(int argc, char **argv)
 		write(2, "Error\nPlease provide one argument\n", 34);
 		return (-1);
 	}
+	fd = open(argv[1], O_DIRECTORY);
+	if (fd != -1)
+		return (close(fd), write(2, "Error\nMap is a directory\n", 25), -1);
 	map_check_format(argv[1]);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
