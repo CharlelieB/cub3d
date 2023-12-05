@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3D.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/05 15:10:14 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/12/05 16:47:22 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -8,17 +20,13 @@
 # include <stdbool.h>
 # include "libft.h"
 
-#define SCREEN_W 1280
-#define SCREEN_H 800
-#define SCREEN_H_HALF 200
-#define TEX_W 64
-#define TEX_H 64
-// #define MAP_W 24
-// #define MAP_H 24
+# define SCREEN_W 1280
+# define SCREEN_H 800
+# define SCREEN_H_HALF 200
+# define TEX_W 64
+# define TEX_H 64
 
-typedef float t_f;
-
-//extern int map[MAP_W * MAP_H];
+typedef float	t_f;
 
 enum	e_direction
 {
@@ -42,7 +50,7 @@ enum	e_keys
 	D
 };
 
-typedef struct	s_img
+typedef struct s_img
 {
 	void	*mlx_img;
 	char	*addr;
@@ -53,19 +61,19 @@ typedef struct	s_img
 	int		height;
 }				t_img;
 
-typedef struct	s_vector
+typedef struct s_vector
 {
 	float	x;
 	float	y;
 }		t_vector;
 
-typedef struct	s_vector_int
+typedef struct s_vector_int
 {
 	int	x;
 	int	y;
 }		t_vector_int;
 
-typedef struct	s_mlx
+typedef struct s_mlx
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
@@ -73,7 +81,7 @@ typedef struct	s_mlx
 	t_img	textures[4];
 }		t_mlx;
 
-typedef struct	s_game
+typedef struct s_game
 {
 	char			*map;
 	unsigned int	map_h;
@@ -89,12 +97,12 @@ typedef struct	s_game
 	float			rot;
 }				t_game;
 
-typedef struct	s_parsing
+typedef struct s_parsing
 {
 	char			**map;
 	char			*assets[6];
-	int			alloc_size;
-	char 			*line;
+	int				alloc_size;
+	char			*line;
 	unsigned int	lsize;
 	int				map_h;
 	unsigned int	map_max_w;
@@ -109,13 +117,15 @@ typedef struct s_data
 	int			side;
 	int			map_x;
 	int			map_y;
-	float 		delta_x;
+	float		delta_x;
 	float		delta_y;
 	int			step_x;
 	int			step_y;
-	float 		wall_dist;
-	int 		wall_height;
-	int 		screen_x;
+	float		wall_dist;
+	int			wall_height;
+	int			screen_x;
+	int			tex_x;
+	int			tex_y;
 }				t_data;
 
 typedef struct s_line
@@ -129,12 +139,15 @@ typedef struct s_line
 
 bool	game_loop(t_game *game);
 bool	render(t_game *game);
-void 	draw(t_game *game);
+void	draw(t_game *game);
 void	ft_clear_image(t_img *img);
 bool	set_img(t_mlx *mlx);
 void	free_memory(t_mlx *mlx);
 void	ft_pixel_put(t_img *img, int x, int y, int color);
+void	dda_init(t_game *game, t_data *data);
 void	raycasting(t_game *game, int x);
+void	textures_draw(t_game *game, t_data *data, int start, int end);
+
 int		set_key_press(int keysym, t_game *game);
 int		set_key_release(int keysym, t_game *game);
 void	mlx_functions(t_game *game);

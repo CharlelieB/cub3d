@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:56:50 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/04 18:43:05 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/05 16:25:34 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,32 +39,7 @@ void	map_check_format(char *filename)
 	}
 }
 
-bool	ft_realloc(t_parsing *parsing)
-{
-	char	**new_map;
-	int		i;
-
-	i = 0;
-	parsing->alloc_size = ft_next_power(parsing->alloc_size);
-	new_map = malloc(parsing->alloc_size);
-	if (!new_map)
-	{
-		write(2, "Failed to realloc\n", 18);
-		free_map(parsing->map, parsing->map_h);
-		return (false);
-	}
-	while (i < parsing->map_h)
-	{
-		*(new_map + i) = *(parsing->map + i);
-		++i;
-	}
-	free(parsing->map);
-	parsing->map = new_map;
-	return (true);
-}
-
-// Remove \n from map, add empty spaces to get a rectangle map
-/*test
+/*test to display map
 printf("Height of the map : %d, Max width : %d\n", game->map_h, game->map_w);
 	for (unsigned int k = 0; k < game->map_h; k++)
 	{
@@ -75,89 +50,7 @@ printf("Height of the map : %d, Max width : %d\n", game->map_h, game->map_w);
 	}
 */
 
-void	setup_player(char c, t_game *game, int y, int x)
-{
-	game->ppos.x = x + 0.5;
-	game->ppos.y = y + 0.5;
-	game->pdir.y = 0;
-	game->pdir.x = 0;
-	if (c == 'N')
-		game->pdir.y = 1;
-	else if (c == 'S')
-		game->pdir.y = -1;
-	else if (c == 'W')
-		game->pdir.x = -1;
-	else if (c == 'E')
-		game->pdir.x = 1;
-	if (!game->pdir.y)
-	{
-		game->plane.x = 0;
-		game->plane.y = 0.66;
-	}
-	else
-	{
-		game->plane.x = 0.66;
-		game->plane.y = 0;
-	}
-}
-
-bool	map_char_checker(t_parsing *parsing, t_game *game, int i, int j)
-{
-	char	c;
-
-	c = parsing->map[i][j];
-	if (c == 'W' || c == 'N' || c == 'S' || c == 'E')
-	{
-		if (parsing->player_found)
-			return (false);
-		else
-			parsing->player_found = true;
-		return (setup_player(c, game, i, j), true);
-	}
-	return (is_space(c) || c == '0' || c == '1');
-}
-
-bool	map_edit(t_parsing *parsing, t_game *game)
-{
-	int				i;
-	unsigned int	j;
-
-	i = -1;
-	game->map = malloc((--parsing->map_max_w) * parsing->map_h);
-	if (!game->map)
-	{
-		write(2, "Map allocation failed\n", 22);
-		return (free_map(parsing->map, parsing->map_h), false);
-	}
-	while (++i < parsing->map_h)
-	{
-		j = 0;
-		while (parsing->map[i][j] && parsing->map[i][j] != '\n')
-		{
-			if (!map_char_checker(parsing, game, i, j))
-				return (false);
-			(game->map)[i * parsing->map_max_w + j] = parsing->map[i][j];
-			++j;
-		}
-		while (j < parsing->map_max_w)
-			(game->map)[i * parsing->map_max_w + j++] = 32;
-	}
-	if (!parsing->player_found)
-		return (write(2, "Error\nNo player\n", 16), false);
-	game->map_h = parsing->map_h;
-	game->map_w = parsing->map_max_w;
-	game->map_s = game->map_h * game->map_w;
-	return (free_map(parsing->map, parsing->map_h), true);
-}
-
-void	free_stack_array_ptr(char *array[], int size)
-{
-	int	i;
-
-	i = -1;
-	while (++i < size)
-		free(array[i]);
-}
+// Remove \n from map, add empty spaces to get a rectangle map
 
 bool	map_assets_save(int fd, t_parsing *parsing)
 {
@@ -172,7 +65,8 @@ bool	map_assets_save(int fd, t_parsing *parsing)
 		{
 			parsing->assets[i] = malloc(parsing->lsize + 1);
 			if (!parsing->assets[i])
-				return (free(parsing->line), free_stack_array_ptr(parsing->assets, i), false);
+				return (free(parsing->line),
+					free_stack_array_ptr(parsing->assets, i), false);
 			ft_strlcpy(parsing->assets[i], parsing->line, parsing->lsize + 1);
 			++i;
 		}
@@ -201,13 +95,14 @@ bool	map_save(int fd, t_parsing *parsing)
 				return (free(parsing->line), false);
 		*(parsing->map + parsing->map_h) = malloc(parsing->lsize + 1);
 		if (!*(parsing->map + parsing->map_h))
-			return (free(parsing->line), free_map(parsing->map, parsing->map_h), false);
-		ft_strlcpy(*(parsing->map + parsing->map_h), parsing->line, parsing->lsize + 1);
+			return (free(parsing->line),
+				free_map(parsing->map, parsing->map_h), false);
+		ft_strlcpy(*(parsing->map + parsing->map_h++),
+			parsing->line, parsing->lsize + 1);
 		if (parsing->lsize > parsing->map_max_w)
 			parsing->map_max_w = parsing->lsize;
 		free(parsing->line);
 		parsing->line = 0;
-		++parsing->map_h;
 	}
 	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:45:19 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/04 18:46:57 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:43:47 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,6 @@ bool	map_compare_direction(char *str, t_game *game)
 	return (map_compare_surfaces(str, game));
 }
 
-/* ft_strncmp CHECK IF I DID RIGHT -------------------------- */
-/* Debug
-	for (int j = 0; j < 4; ++j)
-		printf("%s\n", game->tex_path[j]);
-	printf("%d\n", game->surfaces_color[0]);
-	printf("%d\n", game->surfaces_color[1]);
-*/
 bool	map_check_assets(t_parsing *parsing, t_game *game)
 {
 	int	i;

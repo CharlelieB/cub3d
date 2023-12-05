@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/05 16:27:45 by cbessonn          #+#    #+#             */
+/*   Updated: 2023/12/05 16:27:54 by cbessonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 
 void	ft_pixel_put(t_img *img, int x, int y, int color)
@@ -39,6 +51,7 @@ bool	render(t_game *game)
 {
 	if (game->mlx->win_ptr == NULL)
 		return (false);
-	mlx_put_image_to_window(game->mlx->mlx_ptr, game->mlx->win_ptr, game->mlx->img.mlx_img, 0, 0);
+	mlx_put_image_to_window(game->mlx->mlx_ptr, game->mlx->win_ptr,
+		game->mlx->img.mlx_img, 0, 0);
 	return (true);
 }
