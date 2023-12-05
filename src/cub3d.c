@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:28:06 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 16:32:02 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/05 17:17:26 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ int	handle_no_event(void *game)
 
 void	init(t_game *game)
 {
+	int	i;
+
+	i = 0;
 	if (game->pdir.y == -1 || game->pdir.x == 1)
 		game->rot = (M_PI / 180 * 4);
 	else
@@ -58,6 +61,12 @@ void	init(t_game *game)
 	game->keys[A] = 0;
 	game->keys[S] = 0;
 	game->keys[D] = 0;
+	game->mlx->img.mlx_img = 0;
+	while (i < 4)
+	{
+		game->mlx->textures[i].mlx_img = 0;
+		++i;
+	}
 }
 
 bool	load_textures(t_mlx *mlx, t_game *game)
@@ -82,26 +91,23 @@ bool	load_textures(t_mlx *mlx, t_game *game)
 		{
 			write(2, "Error\nCouldn't get img addr\n", 28);
 			return (false);
-			//TODO: Destroy image if error !!
 		}
 		++i;
 	}
 	return (true);
 }
 
-bool	game_loop(t_game *game)
+void	game_loop(t_game *game)
 {
 	t_mlx	mlx;
 
 	game->mlx = &mlx;
-	if (!set_img(&mlx))
-		return (false);
-	if (!load_textures(&mlx, game))
-		return (false);
 	init(game);
-	draw(game);
-	render(game);
-	mlx_functions(game);
+	if (set_img(&mlx) && load_textures(&mlx, game))
+	{
+		draw(game);
+		render(game);
+		mlx_functions(game);
+	}
 	free_memory(&mlx);
-	return (true);
 }

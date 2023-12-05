@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:10:14 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 16:47:22 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/05 17:10:03 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ typedef struct s_line
 	int	e;
 }				t_line;
 
-bool	game_loop(t_game *game);
+void	game_loop(t_game *game);
 bool	render(t_game *game);
 void	draw(t_game *game);
 void	ft_clear_image(t_img *img);
