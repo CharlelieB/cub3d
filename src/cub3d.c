@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:28:06 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 17:17:26 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/06 13:03:51 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	handle_no_event(void *game)
 	return (0);
 }
 
-void	init(t_game *game)
+void	init_game(t_game *game)
 {
 	int	i;
 
@@ -102,7 +102,7 @@ void	game_loop(t_game *game)
 	t_mlx	mlx;
 
 	game->mlx = &mlx;
-	init(game);
+	init_game(game);
 	if (set_img(&mlx) && load_textures(&mlx, game))
 	{
 		draw(game);

@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:23:20 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 16:23:53 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/06 13:29:52 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,11 @@ void	free_stack_array_ptr(char *array[], int size)
 
 	i = -1;
 	while (++i < size)
-		free(array[i]);
+	{
+		if (array[i])
+		{
+			free(array[i]);
+			array[i] = 0;
+		}
+	}
 }
