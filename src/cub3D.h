@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:10:14 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/06 14:53:53 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/06 16:15:09 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@
 # include <stdbool.h>
 # include "libft.h"
 
-# define SCREEN_W 1280
-# define SCREEN_H 800
+# define SCREEN_W 1024
+# define SCREEN_H 640
+# define SCREEN_S 655360
 # define SCREEN_H_HALF 200
 
 typedef float	t_f;

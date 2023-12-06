@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:27:45 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 16:27:54 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/06 16:19:55 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,27 @@ void	ft_pixel_put(t_img *img, int x, int y, int color)
 	}
 }
 
+/* 
+y = i / W
+x = i % W
+
+. If you make W a power of 2 (W=2^m), you can use the hack
+
+y = i >> m;
+x = (i & (W-1))
+
+*/
 void	ft_clear_image(t_img *img)
 {
-	int	i;
-	int	j;
+	unsigned long int	i;
+	unsigned int		w_minus_one;
 
+	w_minus_one = SCREEN_W - 1;
 	i = 0;
-	while (i < SCREEN_W)
+	while (i < SCREEN_S)
 	{
-		j = 0;
-		while (j < SCREEN_H)
-		{
-			ft_pixel_put(img, i, j, 0x0);
-			j++;
-		}
-		i++;
+		ft_pixel_put(img, (i & w_minus_one), i >> 32, 0x0);
+		++i;
 	}
 }
 
