@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:56:50 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 16:25:34 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/06 12:58:34 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,10 @@ bool	map_parse(int fd, t_parsing *parsing, t_game *game)
 	if (!map_save(fd, parsing))
 		return (free_stack_array_ptr(parsing->assets, 6), false);
 	if (!map_edit(parsing, game))
-		return (free(game->map), false);
+		return (free_stack_array_ptr(parsing->assets, 6),
+			free(game->map), false);
 	if (!flood_fill(game, game->ppos.x, game->ppos.y))
-		return (write(2, "Error\nMap format\n", 17), false);
+		return (free_stack_array_ptr(parsing->assets, 6), free(game->map),
+			write(2, "Error\nMap format\n", 17), false);
 	return (true);
 }

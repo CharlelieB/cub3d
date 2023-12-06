@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:34:47 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 15:09:36 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/06 12:53:14 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,20 @@ bool	map_char_checker(t_parsing *parsing, t_game *game, int i, int j)
 	if (c == 'W' || c == 'N' || c == 'S' || c == 'E')
 	{
 		if (parsing->player_found)
+		{
+			write(2, "Error\nMore than one player\n", 27);
 			return (false);
+		}
 		else
 			parsing->player_found = true;
 		return (setup_player(c, game, i, j), true);
 	}
-	return (is_space(c) || c == '0' || c == '1');
+	if (!is_space(c) && c != '0' && c != '1')
+	{
+		write(2, "Error\nInvalid character\n", 24);
+		return (false);
+	}
+	return (true);
 }
 
 bool	map_fill(t_parsing *parsing, t_game *game)
@@ -106,10 +114,16 @@ bool	map_edit(t_parsing *parsing, t_game *game)
 {
 	game->map = malloc((--parsing->map_max_w) * parsing->map_h);
 	if (!game->map)
-		return (write(2, "Map allocation failed\n", 22),
-			free_map(parsing->map, parsing->map_h), false);
-	if (!map_fill(parsing, game))
+	{
+		write(2, "Map allocation failed\n", 22);
+		free_map(parsing->map, parsing->map_h);
 		return (false);
+	}
+	if (!map_fill(parsing, game))
+	{
+		free_map(parsing->map, parsing->map_h);
+		return (false);
+	}
 	if (!parsing->player_found)
 		return (write(2, "Error\nNo player\n", 16), false);
 	game->map_h = parsing->map_h;

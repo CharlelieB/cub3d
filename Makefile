@@ -2,6 +2,7 @@ NAME := cub3D
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
 SRCS := main.c render.c move.c dda.c keys.c parsing.c parsing_textures.c textures.c parsing_utils.c parsing_utils2.c parsing_map.c mlx_utils.c cub3d.c raycasting.c
+#BONUS := file.c
 OBJ_DIR := obj
 SRC_DIR := src
 SRCS := $(SRCS:%=$(SRC_DIR)/%)
@@ -29,10 +30,9 @@ fclean: clean
 
 re: fclean all
 
+sub:
+	git submodule update --init
+
 .PHONY: all clean fclean re bonus
 
-update:
-	git stash
-	git pull
-	git submodule update --init
-	git stash pop
+

@@ -1,0 +1,11 @@
+SO ./textures/brickwall.xpm
+NO ./textures/Monke.xpm
+WE ./textures/metalwall.xpm
+EA ./textures/wolf.xpm
+
+C 84,171,179
+F 240,211,117
+
+ 1
+1N1
+ 1
