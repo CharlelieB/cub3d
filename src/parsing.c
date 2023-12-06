@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:56:50 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/06 13:26:22 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/06 13:49:24 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ bool	map_assets_save(int fd, t_parsing *parsing)
 		{
 			parsing->assets[i] = malloc(parsing->lsize + 1);
 			if (!parsing->assets[i])
-				return (free(parsing->line),
-					free_stack_array_ptr(parsing->assets, i), false);
+				return (free(parsing->line), false);
 			ft_strlcpy(parsing->assets[i], parsing->line, parsing->lsize + 1);
 			++i;
 		}

@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:32:12 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/06 13:21:45 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/06 13:58:53 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,15 @@ void	destroyer(t_game *game, t_parsing *parsing)
 
 void	init(t_game *game, t_parsing *parsing)
 {
+	int	i;
+
+	i = 0;
 	game->map = 0;
-	ft_bzero(parsing->assets, 0);
+	while (i < 6)
+	{
+		parsing->assets[i] = 0;
+		++i;
+	}
 }
 
 int	main(int argc, char **argv)
