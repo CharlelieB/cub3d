@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:10:14 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 17:10:03 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/06 14:53:53 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 # define SCREEN_W 1280
 # define SCREEN_H 800
 # define SCREEN_H_HALF 200
-# define TEX_W 64
-# define TEX_H 64
 
 typedef float	t_f;
 

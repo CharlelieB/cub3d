@@ -1,7 +1,7 @@
-SO ./textures/redbrick.xpm
-NO ./textures/wood.xpm
-WE ./textures/greystone.xpm
-EA ./textures/bluestone.xpm
+SO ./tex/wall1.xpm
+NO ./tex/wall2.xpm
+WE ./tex/wall3.xpm
+EA ./tex/wall4.xpm
 
 C 84,171,179
 F 240,211,117
