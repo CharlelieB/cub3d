@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:12:58 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/05 16:47:08 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/07 17:17:27 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	walls_draw(t_game *game, t_data *data)
 	start = -data->wall_height / 2 + SCREEN_H_HALF;
 	if (start < 0)
 		start = 0;
-	end = data->wall_height / 2 + SCREEN_H_HALF;
+	end = (data->wall_height >> 1) + SCREEN_H_HALF;
 	if (end >= SCREEN_H)
 		end = SCREEN_H - 1;
 	textures_draw(game, data, start, end);

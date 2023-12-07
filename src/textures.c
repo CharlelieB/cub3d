@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:46:58 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/06 14:56:52 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/07 17:17:00 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	textures_draw(t_game *game, t_data *data, int start, int end)
 	tex_id = textures_get_id(data);
 	data->tex_x = textures_get_x(game, data, tex_id);
 	step = 1.0f * game->mlx->textures[tex_id].width / data->wall_height;
-	tex_pos = (start - SCREEN_H_HALF + data->wall_height / 2) * step;
+	tex_pos = (start - SCREEN_H_HALF + (data->wall_height >> 1)) * step;
 	texture_w = game->mlx->textures[tex_id].line_len;
 	y = start;
 	while (y < end)

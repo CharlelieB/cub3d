@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:32:12 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/06 13:58:53 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/07 19:34:23 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	main(int argc, char **argv)
 	map_check_format(argv[1]);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
-		write(2, "Error\nCould't open map file\n", 28);
+		return (write(2, "Error\nCould't open map file\n", 28), -1);
 	if (map_parse(fd, &parsing, &game))
 		game_loop(&game);
 	close(fd);

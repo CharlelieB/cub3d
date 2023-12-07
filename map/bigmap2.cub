@@ -1,7 +1,7 @@
-SO ./tex/wall1.xpm
-NO ./tex/wall2.xpm
-WE ./tex/wall3.xpm
-EA ./tex/wall4.xpm
+SO ./tex/sc1.xpm
+NO ./tex/sc2.xpm
+WE ./tex/sc3.xpm
+EA ./tex/sc4.xpm
 
 C 84,171,179
 F 240,211,117
