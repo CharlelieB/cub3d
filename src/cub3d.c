@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 16:28:06 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/06 14:53:15 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/07 20:16:05 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	draw(t_game *game)
 {
 	int	i;
 	int	j;
+	t_data	data;
 
 	i = 0;
 	while (i < SCREEN_H_HALF)
@@ -37,8 +38,11 @@ void	draw(t_game *game)
 		++i;
 	}
 	i = -1;
+	while (++i < SCREEN_H)
+		floor_casting(&data, game, i);
+	i = -1;
 	while (++i < SCREEN_W)
-		raycasting(game, i);
+		raycasting(&data, game, i);
 }
 
 int	handle_no_event(void *game)

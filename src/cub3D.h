@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:10:14 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/06 16:15:09 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/07 20:13:57 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,10 @@ typedef struct s_data
 	int			screen_x;
 	int			tex_x;
 	int			tex_y;
+	float		ray_dir_x1;
+	float		ray_dir_x2;
+	float		ray_dir_y1;
+	float		ray_dir_y2;
 }				t_data;
 
 typedef struct s_line
@@ -144,7 +148,8 @@ bool	set_img(t_mlx *mlx);
 void	free_memory(t_mlx *mlx);
 void	ft_pixel_put(t_img *img, int x, int y, int color);
 void	dda_init(t_game *game, t_data *data);
-void	raycasting(t_game *game, int x);
+void	raycasting(t_data *data, t_game *game, int x);
+void	floor_casting(t_data *data, t_game *game, int y);
 void	textures_draw(t_game *game, t_data *data, int start, int end);
 
 int		set_key_press(int keysym, t_game *game);

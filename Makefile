@@ -5,7 +5,7 @@ DIR_DUP = mkdir -p $(@D)
 OBJ_DIR := obj
 SRC_DIR := src
 SRCS := main.c render.c move.c dda.c keys.c parsing.c parsing_textures.c textures.c \
-		parsing_utils.c parsing_utils2.c parsing_map.c mlx_utils.c cub3d.c raycasting.c
+		parsing_utils.c parsing_utils2.c parsing_map.c mlx_utils.c cub3d.c raycasting.c floor.c
 SRCS := $(SRCS:%=$(SRC_DIR)/%)
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LIBS_TARGET := mlx/libmlx.a libft/libft.a

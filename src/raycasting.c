@@ -6,7 +6,7 @@
 /*   By: cbessonn <cbessonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:12:58 by cbessonn          #+#    #+#             */
-/*   Updated: 2023/12/07 17:17:27 by cbessonn         ###   ########.fr       */
+/*   Updated: 2023/12/07 19:51:03 by cbessonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,17 @@ bool	ray_loop(t_data *data, t_game *game)
 	return (true);
 }
 
-void	raycasting(t_game *game, int x)
+void	raycasting(t_data *data, t_game *game, int x)
 {
-	t_data	data;
 	float	camera_x;
 
 	camera_x = 2 * x / (float)SCREEN_W - 1;
-	data.screen_x = x;
-	data.ray.x = game->pdir.x + game->plane.x * camera_x;
-	data.ray.y = game->pdir.y + game->plane.y * camera_x;
-	data.map_x = (int)(game->ppos.x);
-	data.map_y = (int)(game->ppos.y);
-	dda_init(game, &data);
-	if (ray_loop(&data, game))
-		walls_draw(game, &data);
+	data->screen_x = x;
+	data->ray.x = game->pdir.x + game->plane.x * camera_x;
+	data->ray.y = game->pdir.y + game->plane.y * camera_x;
+	data->map_x = (int)(game->ppos.x);
+	data->map_y = (int)(game->ppos.y);
+	dda_init(game, data);
+	if (ray_loop(data, game))
+		walls_draw(game, data);
 }
